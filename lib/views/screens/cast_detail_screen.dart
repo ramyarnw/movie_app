@@ -60,10 +60,14 @@ class _CastDetailScreenState extends State<CastDetailScreen>
             ),
             Row(
               children: [
-                Image(image: AssetImage(
-                  'assets/molly_ringwald.png',
-                ),),
+                Image(
+                  image: AssetImage(
+                    'assets/molly_ringwald.png',
+                  ),
+                ),
+                Column(
 
+                )
               ],
             )
           ],
@@ -86,7 +90,6 @@ class _CastDetailScreenState extends State<CastDetailScreen>
           ),
         ),
       ),
-
       body: TabBarView(
         controller: tabController,
         children: <Widget>[
@@ -114,8 +117,7 @@ class _CastDetailScreenState extends State<CastDetailScreen>
               return MovieTile(
                 title: title,
                 image: image,
-              ); /* Image.network(
-                  images[index], semanticLabel: movieTitle[index]);*/
+              );
             },
           ),
           GridView.builder(
@@ -134,7 +136,6 @@ class _CastDetailScreenState extends State<CastDetailScreen>
           ),
         ],
       ),
-      //body: const Text('CAST DETAILS SHOWN HERE'),
     );
   }
 }

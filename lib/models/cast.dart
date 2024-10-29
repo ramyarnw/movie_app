@@ -6,13 +6,13 @@ import 'package:movie_app/models/serializers.dart';
 part 'cast.g.dart';
 
 abstract class Cast implements Built<Cast, CastBuilder> {
-
-
   Cast._();
+
   factory Cast([void Function(CastBuilder) updates]) = _$Cast;
 
   Map<String, dynamic> toJson() {
-    return serializers.serializeWith(Cast.serializer, this) as Map<String,dynamic>;
+    return serializers.serializeWith(Cast.serializer, this)
+        as Map<String, dynamic>;
   }
 
   static Cast fromJson(Map<String, dynamic> json) {
@@ -20,27 +20,59 @@ abstract class Cast implements Built<Cast, CastBuilder> {
   }
 
   static Serializer<Cast> get serializer => _$castSerializer;
+
   static void initializeBuilder(CastBuilder a) {
-    a..adult = false
-        ..gender = 1;
-
+    a
+      ..adult = false
+      ..gender = 1
+      ..id = 1267329
+      ..knownForDepartment = 'Acting'
+      ..name = 'Lupita Nyong'
+      ..originalName = 'Lupita Nyong'
+      ..popularity = 32.847 as int?
+      ..profilePath = '/y40Wu1T742kynOqtwXASc5Qgm49.jpg'
+      ..castId = 9
+      ..character = 'Roz / Rummage (voice)'
+      ..creditId = '65c03d8ffc65380163eaf41c'
+      ..order = 0;
   }
-bool get adult;
-int get gender;
-int get id;
-  @BuiltValueField(wireName: 'known_for_department', )
-  String get knownForDepartment;
-  String get name;
-  @BuiltValueField(wireName: 'original_name', )
-  String get originalName;
-  int get popularity;
-  @BuiltValueField(wireName: 'profile_path', )
-  String get profilePath;
-  @BuiltValueField(wireName: 'cast_id', )
-  int get castId;
-  String get character;
-  @BuiltValueField(wireName: 'credit_id', )
-  String get creditId;
-  int get order;
 
+  bool get adult;
+
+  int get gender;
+
+  int get id;
+
+  @BuiltValueField(
+    wireName: 'known_for_department',
+  )
+  String get knownForDepartment;
+
+  String get name;
+
+  @BuiltValueField(
+    wireName: 'original_name',
+  )
+  String get originalName;
+
+  int get popularity;
+
+  @BuiltValueField(
+    wireName: 'profile_path',
+  )
+  String get profilePath;
+
+  @BuiltValueField(
+    wireName: 'cast_id',
+  )
+  int get castId;
+
+  String get character;
+
+  @BuiltValueField(
+    wireName: 'credit_id',
+  )
+  String get creditId;
+
+  int get order;
 }

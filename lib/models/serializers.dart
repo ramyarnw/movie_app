@@ -3,6 +3,7 @@ import 'package:built_value/serializer.dart';
 import 'package:built_value/standard_json_plugin.dart';
 import 'package:movie_app/models/tv_shows.dart';
 
+import 'app_state.dart';
 import 'cast.dart';
 import 'movie.dart';
 
@@ -12,8 +13,8 @@ part 'serializers.g.dart';
   Movie,
   Cast,
   TvShows,
-  // AppState,
+  AppState,
   //ApiError,
 ])
 final Serializers serializers =
-(_$serializers.toBuilder()..addPlugin(StandardJsonPlugin())).build();
+    (_$serializers.toBuilder()..addPlugin(StandardJsonPlugin())).build();
