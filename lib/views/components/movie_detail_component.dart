@@ -1,30 +1,32 @@
 import 'package:flutter/material.dart';
 
+import '../../models/cast.dart';
 import '../screens/cast_detail_screen.dart';
 
 class CastComponent extends StatelessWidget {
-  const CastComponent({super.key, required this.imageURL, required this.castName});
+  const CastComponent({super.key, required this.cast,});
 
-  final String castName;
-  final String imageURL;
+  // final String castName;
+  // final String imageURL;
+final Cast cast;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
         Navigator.push(context,
             MaterialPageRoute(builder: (BuildContext context) {
-              return const CastDetailScreen();
+              return CastDetailScreen(id:cast.id,);
             }));
       },
       child:  Column(
           children: [
-            Image.asset(imageURL,width: 100,height: 100,),
+            Image.network(cast.posterImage,width: 100,height: 100,),
             const SizedBox(
               width: 30,
-              height: 30,
+              height: 300,
             ),
             Text(
-              castName,
+              cast.name,
               style: const TextStyle(fontSize: 10),
             ),
           ],

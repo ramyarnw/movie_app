@@ -44,7 +44,7 @@ class _$TvShowsSerializer implements StructuredSerializer<TvShows> {
           specifiedType: const FullType(String)),
       'popularity',
       serializers.serialize(object.popularity,
-          specifiedType: const FullType(String)),
+          specifiedType: const FullType(double)),
       'poster_path',
       serializers.serialize(object.posterPath,
           specifiedType: const FullType(String)),
@@ -55,7 +55,7 @@ class _$TvShowsSerializer implements StructuredSerializer<TvShows> {
       serializers.serialize(object.name, specifiedType: const FullType(String)),
       'vote_average',
       serializers.serialize(object.voteAverage,
-          specifiedType: const FullType(int)),
+          specifiedType: const FullType(double)),
       'vote_count',
       serializers.serialize(object.voteCount,
           specifiedType: const FullType(int)),
@@ -122,7 +122,7 @@ class _$TvShowsSerializer implements StructuredSerializer<TvShows> {
           break;
         case 'popularity':
           result.popularity = serializers.deserialize(value,
-              specifiedType: const FullType(String))! as String;
+              specifiedType: const FullType(double))! as double;
           break;
         case 'poster_path':
           result.posterPath = serializers.deserialize(value,
@@ -138,7 +138,7 @@ class _$TvShowsSerializer implements StructuredSerializer<TvShows> {
           break;
         case 'vote_average':
           result.voteAverage = serializers.deserialize(value,
-              specifiedType: const FullType(int))! as int;
+              specifiedType: const FullType(double))! as double;
           break;
         case 'vote_count':
           result.voteCount = serializers.deserialize(value,
@@ -181,7 +181,7 @@ class _$TvShows extends TvShows {
   @override
   final String overview;
   @override
-  final String popularity;
+  final double popularity;
   @override
   final String posterPath;
   @override
@@ -189,7 +189,7 @@ class _$TvShows extends TvShows {
   @override
   final String name;
   @override
-  final int voteAverage;
+  final double voteAverage;
   @override
   final int voteCount;
   @override
@@ -363,9 +363,9 @@ class TvShowsBuilder implements Builder<TvShows, TvShowsBuilder> {
   String? get overview => _$this._overview;
   set overview(String? overview) => _$this._overview = overview;
 
-  String? _popularity;
-  String? get popularity => _$this._popularity;
-  set popularity(String? popularity) => _$this._popularity = popularity;
+  double? _popularity;
+  double? get popularity => _$this._popularity;
+  set popularity(double? popularity) => _$this._popularity = popularity;
 
   String? _posterPath;
   String? get posterPath => _$this._posterPath;
@@ -379,9 +379,9 @@ class TvShowsBuilder implements Builder<TvShows, TvShowsBuilder> {
   String? get name => _$this._name;
   set name(String? name) => _$this._name = name;
 
-  int? _voteAverage;
-  int? get voteAverage => _$this._voteAverage;
-  set voteAverage(int? voteAverage) => _$this._voteAverage = voteAverage;
+  double? _voteAverage;
+  double? get voteAverage => _$this._voteAverage;
+  set voteAverage(double? voteAverage) => _$this._voteAverage = voteAverage;
 
   int? _voteCount;
   int? get voteCount => _$this._voteCount;

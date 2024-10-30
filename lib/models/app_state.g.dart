@@ -67,6 +67,13 @@ class _$AppStateSerializer implements StructuredSerializer<AppState> {
             specifiedType:
                 const FullType(BuiltList, const [const FullType(TvShows)])));
     }
+    value = object.currentPic;
+    if (value != null) {
+      result
+        ..add('currentPic')
+        ..add(
+            serializers.serialize(value, specifiedType: const FullType(Movie)));
+    }
     return result;
   }
 
@@ -117,6 +124,10 @@ class _$AppStateSerializer implements StructuredSerializer<AppState> {
                       BuiltList, const [const FullType(TvShows)]))!
               as BuiltList<Object?>);
           break;
+        case 'currentPic':
+          result.currentPic.replace(serializers.deserialize(value,
+              specifiedType: const FullType(Movie))! as Movie);
+          break;
       }
     }
 
@@ -137,6 +148,8 @@ class _$AppState extends AppState {
   final BuiltList<Movie>? moviesOfCast;
   @override
   final BuiltList<TvShows>? tvShowsOfCast;
+  @override
+  final Movie? currentPic;
 
   factory _$AppState([void Function(AppStateBuilder)? updates]) =>
       (new AppStateBuilder()..update(updates))._build();
@@ -147,7 +160,8 @@ class _$AppState extends AppState {
       this.upcomingMovie,
       this.castForMovie,
       this.moviesOfCast,
-      this.tvShowsOfCast})
+      this.tvShowsOfCast,
+      this.currentPic})
       : super._();
 
   @override
@@ -166,7 +180,8 @@ class _$AppState extends AppState {
         upcomingMovie == other.upcomingMovie &&
         castForMovie == other.castForMovie &&
         moviesOfCast == other.moviesOfCast &&
-        tvShowsOfCast == other.tvShowsOfCast;
+        tvShowsOfCast == other.tvShowsOfCast &&
+        currentPic == other.currentPic;
   }
 
   @override
@@ -178,6 +193,7 @@ class _$AppState extends AppState {
     _$hash = $jc(_$hash, castForMovie.hashCode);
     _$hash = $jc(_$hash, moviesOfCast.hashCode);
     _$hash = $jc(_$hash, tvShowsOfCast.hashCode);
+    _$hash = $jc(_$hash, currentPic.hashCode);
     _$hash = $jf(_$hash);
     return _$hash;
   }
@@ -190,7 +206,8 @@ class _$AppState extends AppState {
           ..add('upcomingMovie', upcomingMovie)
           ..add('castForMovie', castForMovie)
           ..add('moviesOfCast', moviesOfCast)
-          ..add('tvShowsOfCast', tvShowsOfCast))
+          ..add('tvShowsOfCast', tvShowsOfCast)
+          ..add('currentPic', currentPic))
         .toString();
   }
 }
@@ -234,6 +251,10 @@ class AppStateBuilder implements Builder<AppState, AppStateBuilder> {
   set tvShowsOfCast(ListBuilder<TvShows>? tvShowsOfCast) =>
       _$this._tvShowsOfCast = tvShowsOfCast;
 
+  MovieBuilder? _currentPic;
+  MovieBuilder get currentPic => _$this._currentPic ??= new MovieBuilder();
+  set currentPic(MovieBuilder? currentPic) => _$this._currentPic = currentPic;
+
   AppStateBuilder();
 
   AppStateBuilder get _$this {
@@ -245,6 +266,7 @@ class AppStateBuilder implements Builder<AppState, AppStateBuilder> {
       _castForMovie = $v.castForMovie?.toBuilder();
       _moviesOfCast = $v.moviesOfCast?.toBuilder();
       _tvShowsOfCast = $v.tvShowsOfCast?.toBuilder();
+      _currentPic = $v.currentPic?.toBuilder();
       _$v = null;
     }
     return this;
@@ -274,7 +296,8 @@ class AppStateBuilder implements Builder<AppState, AppStateBuilder> {
               upcomingMovie: _upcomingMovie?.build(),
               castForMovie: _castForMovie?.build(),
               moviesOfCast: _moviesOfCast?.build(),
-              tvShowsOfCast: _tvShowsOfCast?.build());
+              tvShowsOfCast: _tvShowsOfCast?.build(),
+              currentPic: _currentPic?.build());
     } catch (_) {
       late String _$failedField;
       try {
@@ -290,6 +313,8 @@ class AppStateBuilder implements Builder<AppState, AppStateBuilder> {
         _moviesOfCast?.build();
         _$failedField = 'tvShowsOfCast';
         _tvShowsOfCast?.build();
+        _$failedField = 'currentPic';
+        _currentPic?.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
             r'AppState', _$failedField, e.toString());

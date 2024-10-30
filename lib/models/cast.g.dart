@@ -34,7 +34,7 @@ class _$CastSerializer implements StructuredSerializer<Cast> {
           specifiedType: const FullType(String)),
       'popularity',
       serializers.serialize(object.popularity,
-          specifiedType: const FullType(int)),
+          specifiedType: const FullType(double)),
       'profile_path',
       serializers.serialize(object.profilePath,
           specifiedType: const FullType(String)),
@@ -90,7 +90,7 @@ class _$CastSerializer implements StructuredSerializer<Cast> {
           break;
         case 'popularity':
           result.popularity = serializers.deserialize(value,
-              specifiedType: const FullType(int))! as int;
+              specifiedType: const FullType(double))! as double;
           break;
         case 'profile_path':
           result.profilePath = serializers.deserialize(value,
@@ -133,7 +133,7 @@ class _$Cast extends Cast {
   @override
   final String originalName;
   @override
-  final int popularity;
+  final double popularity;
   @override
   final String profilePath;
   @override
@@ -269,9 +269,9 @@ class CastBuilder implements Builder<Cast, CastBuilder> {
   String? get originalName => _$this._originalName;
   set originalName(String? originalName) => _$this._originalName = originalName;
 
-  int? _popularity;
-  int? get popularity => _$this._popularity;
-  set popularity(int? popularity) => _$this._popularity = popularity;
+  double? _popularity;
+  double? get popularity => _$this._popularity;
+  set popularity(double? popularity) => _$this._popularity = popularity;
 
   String? _profilePath;
   String? get profilePath => _$this._profilePath;
@@ -293,7 +293,9 @@ class CastBuilder implements Builder<Cast, CastBuilder> {
   int? get order => _$this._order;
   set order(int? order) => _$this._order = order;
 
-  CastBuilder();
+  CastBuilder() {
+    Cast._initializeBuilder(this);
+  }
 
   CastBuilder get _$this {
     final $v = _$v;

@@ -1,53 +1,88 @@
+import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
 import 'package:movie_app/models/movie.dart';
+import 'package:provider/provider.dart';
 
+import '../../models/app_state.dart';
+import '../../models/cast.dart';
+import '../../view_model/app_view_model.dart';
 import '../components/movie_detail_component.dart';
 
 class MovieDetailScreen extends StatefulWidget {
-  const MovieDetailScreen({super.key});
+  const MovieDetailScreen({super.key, required this.id});
+final int id;
 
   @override
   State<MovieDetailScreen> createState() => _MovieDetailScreenState();
 }
 
 class _MovieDetailScreenState extends State<MovieDetailScreen> {
+  var loading = false;
 
-  List casts = [
-    'assets/molly_ringwald.png',
-    'assets/molly_ringwald.png',
-    'assets/molly_ringwald.png',
-    'assets/molly_ringwald.png',
-    'assets/molly_ringwald.png',
-    'assets/molly_ringwald.png',
-    'assets/molly_ringwald.png',
-    'assets/molly_ringwald.png',
-    'assets/molly_ringwald.png',
-    'assets/molly_ringwald.png',
-  ];
-  List castName = [
-    'Molly',
-    'Molly',
-    'Molly',
-    'Molly',
-    'Molly',
-    'Molly',
-    'Molly',
-    'Molly',
-    'Molly',
-    'Molly',
-  ];
+  @override
+  void initState() {
+    super.initState();
+    getData();
+  }
+
+  Future<void> getData() async {
+    setState(() {
+      loading = true;
+    });
+    await context.read<AppViewModel>().getMovieForId(id:widget.id);
+    await context.read<AppViewModel>().getCastForMovie(id:widget.id);
+    setState(() {
+      loading = false;
+    });
+  }
+
+
+
+  // List casts = [
+  //   'assets/molly_ringwald.png',
+  //   'assets/molly_ringwald.png',
+  //   'assets/molly_ringwald.png',
+  //   'assets/molly_ringwald.png',
+  //   'assets/molly_ringwald.png',
+  //   'assets/molly_ringwald.png',
+  //   'assets/molly_ringwald.png',
+  //   'assets/molly_ringwald.png',
+  //   'assets/molly_ringwald.png',
+  //   'assets/molly_ringwald.png',
+  // ];
+  // List castName = [
+  //   'Molly',
+  //   'Molly',
+  //   'Molly',
+  //   'Molly',
+  //   'Molly',
+  //   'Molly',
+  //   'Molly',
+  //   'Molly',
+  //   'Molly',
+  //   'Molly',
+  // ];
 
   @override
   Widget build(BuildContext context) {
+    Movie? movie =
+        context.watch<AppState>().currentPic;
+    BuiltList<Cast> castMovie =
+        context
+            .watch<AppState>()
+            .castForMovie ?? BuiltList();
+   if(movie==null){
+     return Container();
+   }
+    //var cast = Cast();
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
         toolbarHeight: 300,
-        flexibleSpace: const Image(
-          image: AssetImage(
-            'assets/first_movie.jpg',
-          ),
-          fit: BoxFit.fill,
+        flexibleSpace: Image.network(
+          movie.posterImage,
+          //image,
+          width: 80,
         ),
         title: Stack(
           children: [
@@ -84,7 +119,9 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
           ],
         ),
       ),
-      body: Column(
+      body: loading
+          ? const CircularProgressIndicator()
+          :Column(
         children: [
           const Text(
             'SYNOPSIS',
@@ -100,14 +137,16 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
           ),
           Expanded(
             child: ListView.builder(
-                itemCount: casts.length,
+                itemCount: castMovie.length,
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (BuildContext context, int index) {
-                  final cast = casts[index];
-                  final name = castName[index];
+                  var p = castMovie[index];
+                  // final cast = casts[index];
+                  // final name = castName[index];
                   return CastComponent(
-                   castName: name,
-                    imageURL: cast,
+                    cast:p,
+                    // castName: name,
+                    // imageURL: cast,
                   );
                 }),
           ),
@@ -120,85 +159,85 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
               Row(
                 children: [
                   const Text('adult - '),
-                  Text(Movie().adult.toString())
+                  Text(movie.adult.toString()),
                 ],
               ),
               Row(
                 children: [
                   const Text('backdrop_path - '),
-                  Text(Movie().backdropPath),
+                  Text(movie.backdropPath),
                 ],
               ),
               Row(
                 children: [
                   const Text('genre_ids - '),
-                  Text(Movie().genreIds.toString()),
+                  Text(movie.genreIds.toString()),
                 ],
               ),
               Row(
                 children: [
                   const Text('id - '),
-                  Text(Movie().id.toString()),
+                  Text(movie.id.toString()),
                 ],
               ),
               Row(
                 children: [
                   const Text('original_language - '),
-                  Text(Movie().originalLanguage)
+                  Text(movie.originalLanguage)
                 ],
               ),
               Row(
                 children: [
                   const Text('original_title - '),
-                  Text(Movie().originalTitle),
+                  Text(movie.originalTitle),
                 ],
               ),
               Row(
                 children: [
                   const Text('overview - '),
-                  Text(Movie().overview),
+                  Text(movie.overview),
                 ],
               ),
               Row(
                 children: [
                   const Text('popularity - '),
-                  Text(Movie().popularity),
+                  Text(movie.popularity.toString()),
                 ],
               ),
               Row(
                 children: [
                   const Text('poster_path - '),
-                  Text(Movie().posterPath),
+                  Text(movie.posterPath),
                 ],
               ),
               Row(
                 children: [
                   const Text('release_date - '),
-                  Text(Movie().releaseDate),
+                  Text(movie.releaseDate),
                 ],
               ),
               Row(
                 children: [
                   const Text('title - '),
-                  Text(Movie().title),
+                  Text(movie.title),
                 ],
               ),
               Row(
                 children: [
                   const Text('video - '),
-                  Text(Movie().video.toString()),
+                  Text(movie.video.toString()),
                 ],
               ),
               Row(
                 children: [
                   const Text('vote_average - '),
-                  Text(Movie().voteAverage.toString()),
+                  Text(movie.voteAverage.toString()),
                 ],
               ),
               Row(
                 children: [
                   const Text('vote_count - '),
-                  Text(Movie().voteCount.toString()),
+                  Text(movie.voteCount.toString()),
                 ],
               ),
             ],

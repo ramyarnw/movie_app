@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:built_collection/built_collection.dart';
 import 'package:flutter_state_notifier/flutter_state_notifier.dart';
 import 'package:movie_app/core/api_service.dart';
@@ -29,18 +27,25 @@ class AppViewModel extends StateNotifier<AppState> {
     state = state.rebuild((p2) => p2.upcomingMovie = upcoming.toBuilder());
   }
 
-  Future<void> getCastForMovie(int id) async {
+  Future<void> getCastForMovie({required int id}) async {
     BuiltList<Cast> cast = await apiService.getCastForMovie(id: id);
     state = state.rebuild((p3) => p3.castForMovie = cast.toBuilder());
   }
 
-  Future<void> getMoviesOfCast(int id) async {
+  Future<void> getMoviesOfCast({required int id}) async {
     BuiltList<Movie> moviesCast = await apiService.getMoviesOfCast(id: id);
     state = state.rebuild((p4) => p4.moviesOfCast = moviesCast.toBuilder());
   }
 
-  Future<void> getTvShowsOfCast(int id) async {
+  Future<void> getTvShowsOfCast({required int id}) async {
     BuiltList<TvShows> tvCast = await apiService.getTvShowsOfCast(id: id);
     state = state.rebuild((p4) => p4.tvShowsOfCast = tvCast.toBuilder());
+  }
+
+  Future<void> getMovieForId({required int id}) async {
+    Movie moviePic = await apiService.getMovieForId(id: id);
+    state = state.rebuild(
+      (p) => p.currentPic = moviePic.toBuilder(),
+    );
   }
 }

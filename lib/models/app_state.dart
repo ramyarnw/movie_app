@@ -36,4 +36,8 @@ abstract class AppState implements Built<AppState, AppStateBuilder> {
   BuiltList<Movie>? get moviesOfCast;
 
   BuiltList<TvShows>? get tvShowsOfCast;
+
+  Movie? get currentPic;
+
+  //Movie get moviePic;
 }

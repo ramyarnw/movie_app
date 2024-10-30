@@ -31,20 +31,23 @@ class APIUrls {
   String castTvShow(int id) => '$_castUrl/$id/tv_credits';
 
   String castMovies(int id) => '$_castUrl/$id/movie_credits';
+
+  String moviePic(int id)=> '$_movieUrl/$id';
 }
 
 class ApiServiceImpl implements ApiService {
   final APIUrls url = APIUrls();
 
-  Map<String, String> get defaultHeader => {
+  Map<String, String> get defaultHeader =>
+      {
         'Authorization':
-            'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI4OWI3MjM3YmJjZmYwZmEwNmU0NzgxMWJkZjBlYTEyMyIsIm5iZiI6MTczMDE4MjEyNC41NDY5NjksInN1YiI6IjYxMjMzZjY0ZDY1OTBiMDA1ZDgyNmNkOCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.9ypJjMejHuSSD9POiGpF_V7W9yZpExosEKjuoaeDDjc'
+        'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI4OWI3MjM3YmJjZmYwZmEwNmU0NzgxMWJkZjBlYTEyMyIsIm5iZiI6MTczMDE4MjEyNC41NDY5NjksInN1YiI6IjYxMjMzZjY0ZDY1OTBiMDA1ZDgyNmNkOCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.9ypJjMejHuSSD9POiGpF_V7W9yZpExosEKjuoaeDDjc'
       };
 
   @override
   Future<BuiltList<Cast>> getCastForMovie({required int id}) async {
     http.Response response =
-        await http.get((url.movieCast(id)).toUri(), headers: defaultHeader);
+    await http.get((url.movieCast(id)).toUri(), headers: defaultHeader);
     if (response.statusCode == 200) {
       List body = jsonDecode(response.body)["cast"] as List;
       List<Cast> cast = [];
@@ -52,7 +55,6 @@ class ApiServiceImpl implements ApiService {
         cast.add(Cast.fromJson(i));
       }
       return cast.toBuiltList();
-
     }
     throw 'Failed to fetch top rated data';
   }
@@ -60,7 +62,7 @@ class ApiServiceImpl implements ApiService {
   @override
   Future<BuiltList<Movie>> getMoviesOfCast({required int id}) async {
     http.Response response =
-        await http.get((url.castMovies(id)).toUri(), headers: defaultHeader);
+    await http.get((url.castMovies(id)).toUri(), headers: defaultHeader);
     if (response.statusCode == 200) {
       List body = jsonDecode(response.body) as List;
       List<Movie> movies = [];
@@ -75,7 +77,7 @@ class ApiServiceImpl implements ApiService {
   @override
   Future<BuiltList<Movie>> getPopularMovie() async {
     http.Response response =
-        await http.get((url.popular).toUri(), headers: defaultHeader);
+    await http.get((url.popular).toUri(), headers: defaultHeader);
     if (response.statusCode == 200) {
       List body = jsonDecode(response.body)["results"] as List;
       List<Movie> movies = [];
@@ -91,7 +93,7 @@ class ApiServiceImpl implements ApiService {
   @override
   Future<BuiltList<Movie>> getTopRatedMovie() async {
     http.Response response =
-        await http.get((url.topRated).toUri(), headers: defaultHeader);
+    await http.get((url.topRated).toUri(), headers: defaultHeader);
     if (response.statusCode == 200) {
       List body = jsonDecode(response.body)["results"] as List;
       List<Movie> movies = [];
@@ -106,7 +108,7 @@ class ApiServiceImpl implements ApiService {
   @override
   Future<BuiltList<TvShows>> getTvShowsOfCast({required int id}) async {
     http.Response response =
-        await http.get((url.castTvShow(id)).toUri(), headers: defaultHeader);
+    await http.get((url.castTvShow(id)).toUri(), headers: defaultHeader);
     if (response.statusCode == 200) {
       List body = jsonDecode(response.body) as List;
       List<TvShows> tvShows = [];
@@ -121,7 +123,7 @@ class ApiServiceImpl implements ApiService {
   @override
   Future<BuiltList<Movie>> getUpcomingMovie() async {
     http.Response response =
-        await http.get((url.upcoming).toUri(), headers: defaultHeader);
+    await http.get((url.upcoming).toUri(), headers: defaultHeader);
     if (response.statusCode == 200) {
       List body = jsonDecode(response.body)["results"] as List;
       List<Movie> movies = [];
@@ -131,5 +133,16 @@ class ApiServiceImpl implements ApiService {
       return movies.toBuiltList();
     }
     throw 'Failed to fetch upcoming data';
+  }
+
+  @override
+  Future<Movie> getMovieForId({required int id}) async {
+    http.Response response = await http.get(
+        (url.moviePic(id)).toUri(), headers: defaultHeader);
+    if (response.statusCode == 200) {
+      var body = jsonDecode(response.body);
+      return Movie.fromJson(body);
+    }
+    throw 'Failed to load movie image';
   }
 }

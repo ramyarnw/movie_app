@@ -1,4 +1,3 @@
-import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
 import 'package:movie_app/models/serializers.dart';
@@ -21,7 +20,7 @@ abstract class Cast implements Built<Cast, CastBuilder> {
 
   static Serializer<Cast> get serializer => _$castSerializer;
 
-  static void initializeBuilder(CastBuilder a) {
+  static void _initializeBuilder(CastBuilder a) {
     a
       ..adult = false
       ..gender = 1
@@ -29,7 +28,7 @@ abstract class Cast implements Built<Cast, CastBuilder> {
       ..knownForDepartment = 'Acting'
       ..name = 'Lupita Nyong'
       ..originalName = 'Lupita Nyong'
-      ..popularity = 32.847 as int?
+      ..popularity = 32.847
       ..profilePath = '/y40Wu1T742kynOqtwXASc5Qgm49.jpg'
       ..castId = 9
       ..character = 'Roz / Rummage (voice)'
@@ -55,12 +54,13 @@ abstract class Cast implements Built<Cast, CastBuilder> {
   )
   String get originalName;
 
-  int get popularity;
+  double get popularity;
 
   @BuiltValueField(
     wireName: 'profile_path',
   )
   String get profilePath;
+  String get posterImage => 'https://image.tmdb.org/t/p/w500$profilePath';
 
   @BuiltValueField(
     wireName: 'cast_id',

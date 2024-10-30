@@ -40,7 +40,7 @@ class _$MovieSerializer implements StructuredSerializer<Movie> {
           specifiedType: const FullType(String)),
       'popularity',
       serializers.serialize(object.popularity,
-          specifiedType: const FullType(String)),
+          specifiedType: const FullType(double)),
       'poster_path',
       serializers.serialize(object.posterPath,
           specifiedType: const FullType(String)),
@@ -54,7 +54,7 @@ class _$MovieSerializer implements StructuredSerializer<Movie> {
       serializers.serialize(object.video, specifiedType: const FullType(bool)),
       'vote_average',
       serializers.serialize(object.voteAverage,
-          specifiedType: const FullType(int)),
+          specifiedType: const FullType(double)),
       'vote_count',
       serializers.serialize(object.voteCount,
           specifiedType: const FullType(int)),
@@ -106,7 +106,7 @@ class _$MovieSerializer implements StructuredSerializer<Movie> {
           break;
         case 'popularity':
           result.popularity = serializers.deserialize(value,
-              specifiedType: const FullType(String))! as String;
+              specifiedType: const FullType(double))! as double;
           break;
         case 'poster_path':
           result.posterPath = serializers.deserialize(value,
@@ -126,7 +126,7 @@ class _$MovieSerializer implements StructuredSerializer<Movie> {
           break;
         case 'vote_average':
           result.voteAverage = serializers.deserialize(value,
-              specifiedType: const FullType(int))! as int;
+              specifiedType: const FullType(double))! as double;
           break;
         case 'vote_count':
           result.voteCount = serializers.deserialize(value,
@@ -155,7 +155,7 @@ class _$Movie extends Movie {
   @override
   final String overview;
   @override
-  final String popularity;
+  final double popularity;
   @override
   final String posterPath;
   @override
@@ -165,7 +165,7 @@ class _$Movie extends Movie {
   @override
   final bool video;
   @override
-  final int voteAverage;
+  final double voteAverage;
   @override
   final int voteCount;
 
@@ -309,9 +309,9 @@ class MovieBuilder implements Builder<Movie, MovieBuilder> {
   String? get overview => _$this._overview;
   set overview(String? overview) => _$this._overview = overview;
 
-  String? _popularity;
-  String? get popularity => _$this._popularity;
-  set popularity(String? popularity) => _$this._popularity = popularity;
+  double? _popularity;
+  double? get popularity => _$this._popularity;
+  set popularity(double? popularity) => _$this._popularity = popularity;
 
   String? _posterPath;
   String? get posterPath => _$this._posterPath;
@@ -329,9 +329,9 @@ class MovieBuilder implements Builder<Movie, MovieBuilder> {
   bool? get video => _$this._video;
   set video(bool? video) => _$this._video = video;
 
-  int? _voteAverage;
-  int? get voteAverage => _$this._voteAverage;
-  set voteAverage(int? voteAverage) => _$this._voteAverage = voteAverage;
+  double? _voteAverage;
+  double? get voteAverage => _$this._voteAverage;
+  set voteAverage(double? voteAverage) => _$this._voteAverage = voteAverage;
 
   int? _voteCount;
   int? get voteCount => _$this._voteCount;

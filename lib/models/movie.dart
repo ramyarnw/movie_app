@@ -26,16 +26,16 @@ abstract class Movie implements Built<Movie, MovieBuilder> {
       ..id = 1184918
       ..originalLanguage = 'en'
       ..originalTitle = 'The Wild Robot'
-      ..popularity ='4950.682'
+      ..popularity = 4950.682
       ..title = 'The Wild Robot'
       ..releaseDate = '2024-09-12'
-..posterPath = '/wTnV3PCVW5O92JMrFvvrRcV39RU.jpg'
-      ..video=false
-      ..voteAverage =8
+      ..posterPath = '/wTnV3PCVW5O92JMrFvvrRcV39RU.jpg'
+      ..video = false
+      ..voteAverage = 8.9
       ..voteCount = 1412
-      ..overview = 'After a shipwreck, an intelligent robot called Roz is stranded on an uninhabited island. '
+      ..overview =
+          'After a shipwreck, an intelligent robot called Roz is stranded on an uninhabited island. '
       ..genreIds = [16, 878, 10751].toBuiltList().toBuilder();
-
   }
 
   static Serializer<Movie> get serializer => _$movieSerializer;
@@ -47,7 +47,8 @@ abstract class Movie implements Built<Movie, MovieBuilder> {
   )
   String get backdropPath;
 
-   int get id;
+  int get id;
+
   @BuiltValueField(
     wireName: 'genre_ids',
   )
@@ -65,12 +66,14 @@ abstract class Movie implements Built<Movie, MovieBuilder> {
 
   String get overview;
 
-  String get popularity;
+  double get popularity;
 
   @BuiltValueField(
     wireName: 'poster_path',
   )
   String get posterPath;
+
+  String get posterImage => 'https://image.tmdb.org/t/p/w500$posterPath';
 
   @BuiltValueField(
     wireName: 'release_date',
@@ -84,7 +87,7 @@ abstract class Movie implements Built<Movie, MovieBuilder> {
   @BuiltValueField(
     wireName: 'vote_average',
   )
-  int get voteAverage;
+  double get voteAverage;
 
   @BuiltValueField(
     wireName: 'vote_count',

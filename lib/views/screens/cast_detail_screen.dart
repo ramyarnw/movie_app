@@ -1,9 +1,19 @@
+import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
+import 'package:movie_app/models/tv_shows.dart';
+import 'package:provider/provider.dart';
 
+import '../../models/app_state.dart';
+import '../../models/cast.dart';
+import '../../models/movie.dart';
+import '../../view_model/app_view_model.dart';
+import 'movie_detail_screen.dart';
 import 'movie_home_page.dart';
 
 class CastDetailScreen extends StatefulWidget {
-  const CastDetailScreen({super.key});
+  const CastDetailScreen({super.key, required this.id});
+
+  final int id;
 
   @override
   State<CastDetailScreen> createState() => _CastDetailScreenState();
@@ -12,11 +22,24 @@ class CastDetailScreen extends StatefulWidget {
 class _CastDetailScreenState extends State<CastDetailScreen>
     with TickerProviderStateMixin {
   late TabController tabController;
+  var loading = true;
 
   @override
   void initState() {
     super.initState();
     tabController = TabController(length: 2, vsync: this);
+    getData();
+  }
+
+  Future<void> getData() async {
+    setState(() {
+      loading = true;
+    });
+    await context.read<AppViewModel>().getMoviesOfCast(id:widget.id);
+    await context.read<AppViewModel>().getTvShowsOfCast(id:widget.id);
+    setState(() {
+      loading = false;
+    });
   }
 
   @override
@@ -50,30 +73,57 @@ class _CastDetailScreenState extends State<CastDetailScreen>
 
   @override
   Widget build(BuildContext context) {
+    BuiltList<Movie> castMovie =
+        context
+            .watch<AppState>()
+            .moviesOfCast ?? BuiltList();
+    final BuiltList<TvShows> castTvShow =
+        context
+            .watch<AppState>()
+            .tvShowsOfCast ?? BuiltList();
+    var cast = Cast();
     return Scaffold(
       appBar: AppBar(
-        title: const Column(
+        toolbarHeight: 300,
+        title: Column(
           children: [
-            Text(
+            const Text(
               'Molls',
               style: TextStyle(fontSize: 15, color: Colors.black),
             ),
             Row(
               children: [
-                Image(
+                const Image(
                   image: AssetImage(
                     'assets/molly_ringwald.png',
                   ),
                 ),
                 Column(
-
+                  children: [
+                    Text(cast.adult.toString()),
+                    Text(cast.id.toString()),
+                    Text(cast.gender.toString()),
+                    Text(cast.knownForDepartment),
+                    Text(cast.name),
+                    Text(cast.originalName),
+                    Text(cast.popularity.toString()),
+                    Text(cast.profilePath),
+                    Text(cast.castId.toString()),
+                    Text(cast.profilePath),
+                    Text(cast.character),
+                    Text(cast.creditId),
+                    Text(cast.order.toString()),
+                  ],
                 )
               ],
             )
           ],
         ),
         bottom: PreferredSize(
-          preferredSize: Size(MediaQuery.of(context).size.width, 60),
+          preferredSize: Size(MediaQuery
+              .of(context)
+              .size
+              .width, 60),
           child: TabBar(
             controller: tabController,
             dividerColor: Colors.transparent,
@@ -90,52 +140,81 @@ class _CastDetailScreenState extends State<CastDetailScreen>
           ),
         ),
       ),
-      body: TabBarView(
+      body: loading
+          ? const CircularProgressIndicator()
+          : TabBarView(
         controller: tabController,
         children: <Widget>[
           GridView.builder(
-            itemCount: images.length,
+            itemCount: castMovie.length,
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2, crossAxisSpacing: 4.0, mainAxisSpacing: 4.0),
+                crossAxisCount: 2,
+                crossAxisSpacing: 4.0,
+                mainAxisSpacing: 4.0),
             itemBuilder: (BuildContext context, int index) {
-              final image = images[index];
-              final title = movieTitle[index];
-              return MovieTile(
-                title: title,
-                image: image,
-              ); /*Image.network(
+              var p = castMovie[index];
+              // final image = images[index];
+              // final title = movieTitle[index];
+              return MovieTile(movie: p);
+              // title: title,
+              // image: image,
+              /*Image.network(
                   images[index], semanticLabel: movieTitle[index]);*/
             },
           ),
           GridView.builder(
-            itemCount: images.length,
+            itemCount: castTvShow.length,
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2, crossAxisSpacing: 4.0, mainAxisSpacing: 4.0),
+                crossAxisCount: 2,
+                crossAxisSpacing: 4.0,
+                mainAxisSpacing: 4.0),
             itemBuilder: (BuildContext context, int index) {
-              final image = images[index];
-              final title = movieTitle[index];
-              return MovieTile(
-                title: title,
-                image: image,
-              );
-            },
-          ),
-          GridView.builder(
-            itemCount: images.length,
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2, crossAxisSpacing: 4.0, mainAxisSpacing: 4.0),
-            itemBuilder: (BuildContext context, int index) {
-              final image = images[index];
-              final title = movieTitle[index];
-              return MovieTile(
-                title: title,
-                image: image,
+              var p = castTvShow[index];
+              // final image = images[index];
+              // final title = movieTitle[index];
+              return TvTile(
+                tv: p,
+                // title: title,
+                // image: image,
               );
               //Image.network(images[index],semanticLabel: movieTitle[index]);
             },
           ),
         ],
       ),
+    );
+  }
+}
+
+//COMPONENT TVTILE
+class TvTile extends StatelessWidget {
+  const TvTile({
+    super.key,
+    required this.tv,
+  });
+
+  final TvShows tv;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        ElevatedButton(
+          onPressed: () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (BuildContext context) {
+                  return const MovieDetailScreen(id: 1,);
+                }));
+          },
+          child: Image.network(
+            tv.posterPath,
+            //image,
+            width: 80,
+          ),
+        ),
+        Text(tv.name),
+        //Text(title),
+      ],
     );
   }
 }

@@ -1,4 +1,10 @@
+//import 'package:built_collection/src/list.dart';
+import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
+import 'package:movie_app/models/app_state.dart';
+import 'package:movie_app/models/movie.dart';
+import 'package:movie_app/view_model/app_view_model.dart';
+import 'package:provider/provider.dart';
 
 import 'movie_detail_screen.dart';
 
@@ -12,11 +18,25 @@ class MovieHomePage extends StatefulWidget {
 class _MovieHomePageState extends State<MovieHomePage>
     with TickerProviderStateMixin {
   late TabController tabController;
+  var loading = false;
 
   @override
   void initState() {
     super.initState();
     tabController = TabController(length: 3, vsync: this);
+    getData();
+  }
+
+  Future<void> getData() async {
+    setState(() {
+      loading = true;
+    });
+    await context.read<AppViewModel>().getPopularMovie();
+await context.read<AppViewModel>().getUpcoming();
+await context.read<AppViewModel>().getTopRatedMovie();
+    setState(() {
+      loading = false;
+    });
   }
 
   @override
@@ -25,31 +45,15 @@ class _MovieHomePageState extends State<MovieHomePage>
     super.dispose();
   }
 
-  List<String> images = [
-    "https://i.pinimg.com/736x/c3/71/26/c371266d68ea6311ef02540d2d0503ad.jpg",
-    "https://i.pinimg.com/originals/a1/88/96/a18896faf54f0aff380de277b2cd10b2.jpg",
-    "https://i.pinimg.com/564x/42/10/d6/4210d628498c2c087aa222cb73f51bba.jpg",
-    "https://i.pinimg.com/564x/98/c7/5a/98c75ac110bfd99ed1403b8e9f8c3f34.jpg",
-    "https://i.pinimg.com/474x/1c/30/44/1c3044e818cd0bf50a8edd0278067a34.jpg",
-    "https://i.pinimg.com/474x/02/a5/96/02a5965b18572a4d009b3ada3a5e7256.jpg",
-    "https://i.pinimg.com/474x/2b/ef/02/2bef0206deeb2fdab11608fd3d0d60a7.jpg",
-    "https://i.pinimg.com/564x/11/0f/a3/110fa3772d0e55a32957020b70cdbcbe.jpg",
-    "https://i.pinimg.com/474x/a6/2d/59/a62d599b934b27742aca9527da759ff8.jpg",
-  ];
-  List<String> movieTitle = [
-    'THE BREAKFAST CLUB',
-    'A QUIET PLACE',
-    'TANGLED 2010',
-    'LILO & STITCH 2002',
-    'LILO & STITCH 2002',
-    'MOANA 2016',
-    'RIO 2011',
-    'CARS 2006',
-    'ALVIN AND THE CHIKMUNKS 2007',
-  ];
 
   @override
   Widget build(BuildContext context) {
+    BuiltList<Movie> popular =
+        context.watch<AppState>().popularMovie ?? BuiltList();
+    BuiltList<Movie> upcoming =
+        context.watch<AppState>().upcomingMovie ?? BuiltList();
+    BuiltList<Movie> topRated =
+        context.watch<AppState>().topRatedMovie ?? BuiltList();
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -69,10 +73,7 @@ class _MovieHomePageState extends State<MovieHomePage>
           ),
         ],
         bottom: PreferredSize(
-          preferredSize: Size(MediaQuery
-              .of(context)
-              .size
-              .width, 60),
+          preferredSize: Size(MediaQuery.of(context).size.width, 60),
           child: TabBar(
             controller: tabController,
             dividerColor: Colors.transparent,
@@ -93,89 +94,95 @@ class _MovieHomePageState extends State<MovieHomePage>
           ),
         ),
       ),
-      body: TabBarView(
-        controller: tabController,
-        children: <Widget>[
-          GridView.builder(
-            itemCount: images.length,
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 4.0,
-                mainAxisSpacing: 4.0),
-            itemBuilder: (BuildContext context, int index) {
-              final image = images[index];
-              final title = movieTitle[index];
-              return  MovieTile(
-                title: title,
-                image: image,
-              );/*Image.network(
+      body: loading
+          ? const CircularProgressIndicator()
+          : TabBarView(
+              controller: tabController,
+              children: <Widget>[
+                GridView.builder(
+                  itemCount: popular.length,
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 4.0,
+                      mainAxisSpacing: 4.0),
+                  itemBuilder: (BuildContext context, int index) {
+                    var p = popular[index];
+
+                    return MovieTile(
+                      movie: p,
+
+                    ); /*Image.network(
                   images[index], semanticLabel: movieTitle[index]);*/
-            },
-          ), GridView.builder(
-            itemCount: images.length,
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 4.0,
-                mainAxisSpacing: 4.0),
-            itemBuilder: (BuildContext context, int index) {
-              final image = images[index];
-              final title = movieTitle[index];
-              return MovieTile(
-                title: title,
-                image: image,
-              );/* Image.network(
+                  },
+                ),
+                GridView.builder(
+                  itemCount: upcoming.length,
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 4.0,
+                      mainAxisSpacing: 4.0),
+                  itemBuilder: (BuildContext context, int index) {
+                    var p = upcoming[index];
+                    //final image = images[index];
+                   // final title = movieTitle[index];
+                    return MovieTile(
+                      movie: p,
+                     // title: title,
+                     // image: image,
+                    ); /* Image.network(
                   images[index], semanticLabel: movieTitle[index]);*/
-            },
-          ), GridView.builder(
-            itemCount: images.length,
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 4.0,
-                mainAxisSpacing: 4.0),
-            itemBuilder: (BuildContext context, int index) {
-              final image = images[index];
-              final title = movieTitle[index];
-              return MovieTile(
-                title: title,
-                image: image,
-              );
-              //Image.network(images[index],semanticLabel: movieTitle[index]);
-            },
-          ),
-        ],
-      ),
+                  },
+                ),
+                GridView.builder(
+                  itemCount: topRated.length,
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 4.0,
+                      mainAxisSpacing: 4.0),
+                  itemBuilder: (BuildContext context, int index) {
+                    var p = topRated[index];
+                    return MovieTile(
+                     movie: p,
+                    );
+                    //Image.network(images[index],semanticLabel: movieTitle[index]);
+                  },
+                ),
+              ],
+            ),
     );
   }
 }
+
 //COMPONENT MOVIETILE
 class MovieTile extends StatelessWidget {
-  const MovieTile({super.key, required this.title, required this.image,});
+  const MovieTile({
+    super.key,
+    required this.movie,
+  });
 
-  final String title;
-  final String image;
+  final Movie movie;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        ElevatedButton(onPressed: () {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (BuildContext context) {
-                return const MovieDetailScreen();
-              }));
-        },
-            child: Image.network(image,width: 80,),),
-
-        Text(title),
+        ElevatedButton(
+          onPressed: () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (BuildContext context) {
+              return  MovieDetailScreen(id: movie.id,);
+            }));
+          },
+          child:
+          Image.network(
+            movie.posterImage,
+            //image,
+            width: 80,
+          ),
+        ),
+        Text(movie.title),
+        //Text(title),
       ],
     );
   }
-/*ListTile(
-      leading: Text(image),
-      trailing: Text(
-        title,
-        style: const TextStyle(color: Colors.green, fontSize: 15),
-      ),
-    );*/
-
 }
