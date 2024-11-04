@@ -1,6 +1,8 @@
 import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:movie_app/models/auth_user.dart';
 import 'package:movie_app/models/serializers.dart';
 import 'package:movie_app/models/tv_shows.dart';
 
@@ -38,6 +40,12 @@ abstract class AppState implements Built<AppState, AppStateBuilder> {
   BuiltList<TvShows>? get tvShowsOfCast;
 
   Movie? get currentPic;
+
+  Cast get currentPicCast;
+
+  AuthUser? get currentUser;
+
+  //String uid;
 
   //Movie get moviePic;
 }

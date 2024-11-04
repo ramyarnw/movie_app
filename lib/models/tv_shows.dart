@@ -58,7 +58,7 @@ abstract class TvShows implements Built<TvShows, TvShowsBuilder> {
     wireName: 'poster_path',
   )
   String get posterPath;
-
+  String get posterImage => 'https://image.tmdb.org/t/p/w500$posterPath';
   @BuiltValueField(
     wireName: 'first_air_date',
   )

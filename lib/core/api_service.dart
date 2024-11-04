@@ -6,6 +6,9 @@ import 'package:movie_app/models/tv_shows.dart';
 abstract class ApiService {
   Future<BuiltList<Movie>> getPopularMovie();
  Future<Movie> getMovieForId({required int id});
+
+  Future<Cast> getCastForId({required int id});
+
   Future<BuiltList<Movie>> getTopRatedMovie();
 
   Future<BuiltList<Movie>> getUpcomingMovie();

@@ -8,6 +8,7 @@ part of 'serializers.dart';
 
 Serializers _$serializers = (new Serializers().toBuilder()
       ..add(AppState.serializer)
+      ..add(AuthUser.serializer)
       ..add(Cast.serializer)
       ..add(Movie.serializer)
       ..add(TvShows.serializer)

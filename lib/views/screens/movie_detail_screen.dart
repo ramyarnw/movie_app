@@ -67,6 +67,7 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
   Widget build(BuildContext context) {
     Movie? movie =
         context.watch<AppState>().currentPic;
+
     BuiltList<Cast> castMovie =
         context
             .watch<AppState>()
@@ -101,7 +102,7 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
                   children: [
                     FilledButton(
                       onPressed: () {},
-                      child: const Text('23-5-2024'),
+                      child: Text(movie.releaseDate),
                     ),
                     FilledButton(
                       onPressed: () {},
@@ -109,9 +110,9 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
                     ),
                   ],
                 ),
-                const Text(
-                  'THE BREAKFAST CLUB',
-                  style: TextStyle(fontSize: 20, color: Colors.red),
+                 Text(
+                  movie.title,
+                  style: const TextStyle(fontSize: 20, color: Colors.red),
                 )
                 //backgroundColor: Theme.of(context).shadowColor,
               ],
@@ -127,9 +128,9 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
             'SYNOPSIS',
             style: TextStyle(fontSize: 20, color: Colors.black),
           ),
-          const Text(
-            'The Breakfast Club is a 1985 American coming-of-age comedy-drama film about five high school students who spend a Saturday in detention together .',
-            style: TextStyle(fontSize: 15, color: Colors.black),
+           Text(
+           movie.overview,
+            style: const TextStyle(fontSize: 15, color: Colors.black),
           ),
           const Text(
             'Cast',
@@ -158,67 +159,67 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
             children: [
               Row(
                 children: [
-                  const Text('adult - '),
+                  const Text('adult    -    '),
                   Text(movie.adult.toString()),
                 ],
               ),
               Row(
                 children: [
-                  const Text('backdrop_path - '),
+                  const Text('backdrop_path    -    '),
                   Text(movie.backdropPath),
                 ],
               ),
               Row(
                 children: [
-                  const Text('genre_ids - '),
+                  const Text('genre_ids     -    '),
                   Text(movie.genreIds.toString()),
                 ],
               ),
               Row(
                 children: [
-                  const Text('id - '),
+                  const Text('id     -    '),
                   Text(movie.id.toString()),
                 ],
               ),
               Row(
                 children: [
-                  const Text('original_language - '),
+                  const Text('original_language     -     '),
                   Text(movie.originalLanguage)
                 ],
               ),
               Row(
                 children: [
-                  const Text('original_title - '),
+                  const Text('original_title     -     '),
                   Text(movie.originalTitle),
                 ],
               ),
               Row(
                 children: [
-                  const Text('overview - '),
+                  const Text('overview    -     '),
                   Text(movie.overview),
                 ],
               ),
               Row(
                 children: [
-                  const Text('popularity - '),
+                  const Text('popularity     -     '),
                   Text(movie.popularity.toString()),
                 ],
               ),
               Row(
                 children: [
-                  const Text('poster_path - '),
+                  const Text('poster_path     -     '),
                   Text(movie.posterPath),
                 ],
               ),
               Row(
                 children: [
-                  const Text('release_date - '),
+                  const Text('release_date     -     '),
                   Text(movie.releaseDate),
                 ],
               ),
               Row(
                 children: [
-                  const Text('title - '),
+                  const Text('title     -     '),
                   Text(movie.title),
                 ],
               ),

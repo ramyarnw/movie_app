@@ -6,6 +6,7 @@ import 'package:movie_app/models/movie.dart';
 import 'package:movie_app/view_model/app_view_model.dart';
 import 'package:provider/provider.dart';
 
+import 'login_screen.dart';
 import 'movie_detail_screen.dart';
 
 class MovieHomePage extends StatefulWidget {
@@ -71,6 +72,13 @@ await context.read<AppViewModel>().getTopRatedMovie();
             color: Colors.black,
             onPressed: () {},
           ),
+          ElevatedButton(onPressed: ()
+              {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (BuildContext context) {
+                      return  const LoginScreen();
+                    }));
+              }, child: const Text('Login'))
         ],
         bottom: PreferredSize(
           preferredSize: Size(MediaQuery.of(context).size.width, 60),

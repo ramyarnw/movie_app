@@ -4,6 +4,7 @@ import 'package:built_value/standard_json_plugin.dart';
 import 'package:movie_app/models/tv_shows.dart';
 
 import 'app_state.dart';
+import 'auth_user.dart';
 import 'cast.dart';
 import 'movie.dart';
 
@@ -14,6 +15,7 @@ part 'serializers.g.dart';
   Cast,
   TvShows,
   AppState,
+  AuthUser,
   //ApiError,
 ])
 final Serializers serializers =

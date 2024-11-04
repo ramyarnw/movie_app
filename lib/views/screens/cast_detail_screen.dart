@@ -1,6 +1,7 @@
 import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
 import 'package:movie_app/models/tv_shows.dart';
+import 'package:movie_app/views/screens/tv_detail_screen.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/app_state.dart';
@@ -35,8 +36,10 @@ class _CastDetailScreenState extends State<CastDetailScreen>
     setState(() {
       loading = true;
     });
+    await context.read<AppViewModel>().getCastForId(id:widget.id);
     await context.read<AppViewModel>().getMoviesOfCast(id:widget.id);
     await context.read<AppViewModel>().getTvShowsOfCast(id:widget.id);
+
     setState(() {
       loading = false;
     });
@@ -81,37 +84,42 @@ class _CastDetailScreenState extends State<CastDetailScreen>
         context
             .watch<AppState>()
             .tvShowsOfCast ?? BuiltList();
-    var cast = Cast();
+    Cast? cast =
+        context.watch<AppState>().currentPicCast;
+    //var cast = Cast();
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 300,
         title: Column(
           children: [
-            const Text(
-              'Molls',
-              style: TextStyle(fontSize: 15, color: Colors.black),
+             Text(
+              cast.name,
+              style: const TextStyle(fontSize: 25, color: Colors.black,),
             ),
             Row(
               children: [
-                const Image(
-                  image: AssetImage(
-                    'assets/molly_ringwald.png',
-                  ),
+
+                 Image.network(
+                    cast.posterImage,
+                    //image,
+                    width: 150,
+                   height: 150,
+
                 ),
                 Column(
                   children: [
-                    Text(cast.adult.toString()),
+                  //  Text(cast.adult.toString()),
                     Text(cast.id.toString()),
-                    Text(cast.gender.toString()),
-                    Text(cast.knownForDepartment),
-                    Text(cast.name),
+                    //Text(cast.gender.toString()),
+                   // Text(cast.knownForDepartment),
+                    //Text(cast.name),
                     Text(cast.originalName),
-                    Text(cast.popularity.toString()),
-                    Text(cast.profilePath),
+                    //Text(cast.popularity.toString()),
+                    //Text(cast.profilePath),
                     Text(cast.castId.toString()),
-                    Text(cast.profilePath),
-                    Text(cast.character),
-                    Text(cast.creditId),
+                   // Text(cast.profilePath),
+                    //Text(cast.character),
+                    //Text(cast.creditId),
                     Text(cast.order.toString()),
                   ],
                 )
@@ -155,7 +163,7 @@ class _CastDetailScreenState extends State<CastDetailScreen>
               var p = castMovie[index];
               // final image = images[index];
               // final title = movieTitle[index];
-              return MovieTile(movie: p);
+              return CastMovieTile(movie: p);
               // title: title,
               // image: image,
               /*Image.network(
@@ -203,16 +211,49 @@ class TvTile extends StatelessWidget {
           onPressed: () {
             Navigator.push(context,
                 MaterialPageRoute(builder: (BuildContext context) {
-                  return const MovieDetailScreen(id: 1,);
+                  return TvDetailScreen(id: tv.id,);
                 }));
           },
           child: Image.network(
-            tv.posterPath,
+            tv.posterImage,
             //image,
             width: 80,
           ),
         ),
         Text(tv.name),
+        //Text(title),
+      ],
+    );
+  }
+}
+//cast movietile component
+class CastMovieTile extends StatelessWidget {
+  const CastMovieTile({
+    super.key,
+    required this.movie,
+  });
+
+  final Movie movie;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        ElevatedButton(
+          onPressed: () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (BuildContext context) {
+                  return  MovieDetailScreen(id: movie.id,);
+                }));
+          },
+          child:
+          Image.network(
+            movie.posterImage,
+            //image,
+            width: 80,
+          ),
+        ),
+        Text(movie.title),
         //Text(title),
       ],
     );

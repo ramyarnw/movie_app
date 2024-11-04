@@ -33,6 +33,8 @@ class APIUrls {
   String castMovies(int id) => '$_castUrl/$id/movie_credits';
 
   String moviePic(int id)=> '$_movieUrl/$id';
+
+  String castPic(int id)=> '$_castUrl/$id';
 }
 
 class ApiServiceImpl implements ApiService {
@@ -64,7 +66,7 @@ class ApiServiceImpl implements ApiService {
     http.Response response =
     await http.get((url.castMovies(id)).toUri(), headers: defaultHeader);
     if (response.statusCode == 200) {
-      List body = jsonDecode(response.body) as List;
+      List body = jsonDecode(response.body)["cast"] as List;
       List<Movie> movies = [];
       for (final i in body) {
         movies.add(Movie.fromJson(i));
@@ -110,7 +112,7 @@ class ApiServiceImpl implements ApiService {
     http.Response response =
     await http.get((url.castTvShow(id)).toUri(), headers: defaultHeader);
     if (response.statusCode == 200) {
-      List body = jsonDecode(response.body) as List;
+      List body = jsonDecode(response.body)["cast"] as List;
       List<TvShows> tvShows = [];
       for (final i in body) {
         tvShows.add(TvShows.fromJson(i));
@@ -144,5 +146,18 @@ class ApiServiceImpl implements ApiService {
       return Movie.fromJson(body);
     }
     throw 'Failed to load movie image';
+  }
+
+
+
+  @override
+  Future<Cast> getCastForId({required int id}) async {
+    http.Response response = await http.get(
+        (url.castPic(id)).toUri(), headers: defaultHeader);
+    if (response.statusCode == 200) {
+      var body = jsonDecode(response.body);
+      return Cast.fromJson(body);
+    }
+    throw 'Failed to load cast image';
   }
 }
