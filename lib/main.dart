@@ -4,11 +4,12 @@ import 'package:flutter_state_notifier/flutter_state_notifier.dart';
 import 'package:movie_app/view_model/app_view_model.dart';
 import 'package:movie_app/views/screens/movie_home_page.dart';
 
+import 'firebase_options.dart';
 import 'models/app_state.dart';
 
-void main() {
-  Firebase.initializeApp();
-
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options:DefaultFirebaseOptions.currentPlatform );
   runApp(
     StateNotifierProvider<AppViewModel, AppState>(
         create: (_) => AppViewModel(), child: const MyApp()),
