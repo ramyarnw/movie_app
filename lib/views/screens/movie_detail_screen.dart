@@ -1,6 +1,7 @@
 import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
 import 'package:movie_app/models/movie.dart';
+import 'package:movie_app/views/screens/movie_review_screen.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/app_state.dart';
@@ -10,7 +11,8 @@ import '../components/movie_detail_component.dart';
 
 class MovieDetailScreen extends StatefulWidget {
   const MovieDetailScreen({super.key, required this.id});
-final int id;
+
+  final int id;
 
   @override
   State<MovieDetailScreen> createState() => _MovieDetailScreenState();
@@ -29,14 +31,12 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
     setState(() {
       loading = true;
     });
-    await context.read<AppViewModel>().getMovieForId(id:widget.id);
-    await context.read<AppViewModel>().getCastForMovie(id:widget.id);
+    await context.read<AppViewModel>().getMovieForId(id: widget.id);
+    await context.read<AppViewModel>().getCastForMovie(id: widget.id);
     setState(() {
       loading = false;
     });
   }
-
-
 
   // List casts = [
   //   'assets/molly_ringwald.png',
@@ -65,16 +65,13 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    Movie? movie =
-        context.watch<AppState>().currentPic;
+    Movie? movie = context.watch<AppState>().currentPic;
 
     BuiltList<Cast> castMovie =
-        context
-            .watch<AppState>()
-            .castForMovie ?? BuiltList();
-   if(movie==null){
-     return Container();
-   }
+        context.watch<AppState>().castForMovie ?? BuiltList();
+    if (movie == null) {
+      return Container();
+    }
     //var cast = Cast();
     return Scaffold(
       appBar: AppBar(
@@ -91,13 +88,21 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                Align(
-                  alignment: Alignment.topRight,
-                  child: ElevatedButton(
-                    onPressed: () {},
-                    child: const Text('Book Ticket'),
+                if (context.watch<AppState>().currentUser != null)
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (c) =>
+                                MovieReviewScreen(movieId: movie.id),
+                          ),
+                        );
+                      },
+                      child: const Text('Review'),
+                    ),
                   ),
-                ),
                 Row(
                   children: [
                     FilledButton(
@@ -110,7 +115,7 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
                     ),
                   ],
                 ),
-                 Text(
+                Text(
                   movie.title,
                   style: const TextStyle(fontSize: 20, color: Colors.red),
                 )
@@ -122,130 +127,130 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
       ),
       body: loading
           ? const CircularProgressIndicator()
-          :Column(
-        children: [
-          const Text(
-            'SYNOPSIS',
-            style: TextStyle(fontSize: 20, color: Colors.black),
-          ),
-           Text(
-           movie.overview,
-            style: const TextStyle(fontSize: 15, color: Colors.black),
-          ),
-          const Text(
-            'Cast',
-            style: TextStyle(fontSize: 20, color: Colors.black),
-          ),
-          Expanded(
-            child: ListView.builder(
-                itemCount: castMovie.length,
-                scrollDirection: Axis.horizontal,
-                itemBuilder: (BuildContext context, int index) {
-                  var p = castMovie[index];
-                  // final cast = casts[index];
-                  // final name = castName[index];
-                  return CastComponent(
-                    cast:p,
-                    // castName: name,
-                    // imageURL: cast,
-                  );
-                }),
-          ),
-          const Text(
-            'ABOUT',
-            style: TextStyle(fontSize: 20, color: Colors.black),
-          ),
-          Column(
-            children: [
-              Row(
-                children: [
-                  const Text('adult    -    '),
-                  Text(movie.adult.toString()),
-                ],
-              ),
-              Row(
-                children: [
-                  const Text('backdrop_path    -    '),
-                  Text(movie.backdropPath),
-                ],
-              ),
-              Row(
-                children: [
-                  const Text('genre_ids     -    '),
-                  Text(movie.genreIds.toString()),
-                ],
-              ),
-              Row(
-                children: [
-                  const Text('id     -    '),
-                  Text(movie.id.toString()),
-                ],
-              ),
-              Row(
-                children: [
-                  const Text('original_language     -     '),
-                  Text(movie.originalLanguage)
-                ],
-              ),
-              Row(
-                children: [
-                  const Text('original_title     -     '),
-                  Text(movie.originalTitle),
-                ],
-              ),
-              Row(
-                children: [
-                  const Text('overview    -     '),
-                  Text(movie.overview),
-                ],
-              ),
-              Row(
-                children: [
-                  const Text('popularity     -     '),
-                  Text(movie.popularity.toString()),
-                ],
-              ),
-              Row(
-                children: [
-                  const Text('poster_path     -     '),
-                  Text(movie.posterPath),
-                ],
-              ),
-              Row(
-                children: [
-                  const Text('release_date     -     '),
-                  Text(movie.releaseDate),
-                ],
-              ),
-              Row(
-                children: [
-                  const Text('title     -     '),
-                  Text(movie.title),
-                ],
-              ),
-              Row(
-                children: [
-                  const Text('video - '),
-                  Text(movie.video.toString()),
-                ],
-              ),
-              Row(
-                children: [
-                  const Text('vote_average - '),
-                  Text(movie.voteAverage.toString()),
-                ],
-              ),
-              Row(
-                children: [
-                  const Text('vote_count - '),
-                  Text(movie.voteCount.toString()),
-                ],
-              ),
-            ],
-          ),
-          //Text(Movie().posterPath)
-        ],
-      ),
+          : Column(
+              children: [
+                const Text(
+                  'SYNOPSIS',
+                  style: TextStyle(fontSize: 20, color: Colors.black),
+                ),
+                Text(
+                  movie.overview,
+                  style: const TextStyle(fontSize: 15, color: Colors.black),
+                ),
+                const Text(
+                  'Cast',
+                  style: TextStyle(fontSize: 20, color: Colors.black),
+                ),
+                Expanded(
+                  child: ListView.builder(
+                      itemCount: castMovie.length,
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (BuildContext context, int index) {
+                        var p = castMovie[index];
+                        // final cast = casts[index];
+                        // final name = castName[index];
+                        return CastComponent(
+                          cast: p,
+                          // castName: name,
+                          // imageURL: cast,
+                        );
+                      }),
+                ),
+                const Text(
+                  'ABOUT',
+                  style: TextStyle(fontSize: 20, color: Colors.black),
+                ),
+                Column(
+                  children: [
+                    Row(
+                      children: [
+                        const Text('adult    -    '),
+                        Text(movie.adult.toString()),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        const Text('backdrop_path    -    '),
+                        Text(movie.backdropPath),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        const Text('genre_ids     -    '),
+                        Text(movie.genreIds.toString()),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        const Text('id     -    '),
+                        Text(movie.id.toString()),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        const Text('original_language     -     '),
+                        Text(movie.originalLanguage)
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        const Text('original_title     -     '),
+                        Text(movie.originalTitle),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        const Text('overview    -     '),
+                        Text(movie.overview),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        const Text('popularity     -     '),
+                        Text(movie.popularity.toString()),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        const Text('poster_path     -     '),
+                        Text(movie.posterPath),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        const Text('release_date     -     '),
+                        Text(movie.releaseDate),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        const Text('title     -     '),
+                        Text(movie.title),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        const Text('video - '),
+                        Text(movie.video.toString()),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        const Text('vote_average - '),
+                        Text(movie.voteAverage.toString()),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        const Text('vote_count - '),
+                        Text(movie.voteCount.toString()),
+                      ],
+                    ),
+                  ],
+                ),
+                //Text(Movie().posterPath)
+              ],
+            ),
     );
   }
 }

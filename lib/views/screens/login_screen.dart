@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:movie_app/view_model/app_view_model.dart';
-import 'package:movie_app/views/screens/cast_detail_screen.dart';
+import 'package:movie_app/views/screens/login_verify_screen.dart';
 import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -28,12 +28,9 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-
-      ),
+      appBar: AppBar(),
       body: Center(
         child: Column(
-
           children: [
             TextField(
               controller: _controller,
@@ -44,9 +41,15 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             ElevatedButton(
               onPressed: () async {
-                String verifyOtp =await context.read<AppViewModel>().sendOtp(phoneNo:_controller.text);
-
-
+                String vid = await context
+                        .read<AppViewModel>()
+                    .sendOtp(phoneNo: _controller.text);
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (BuildContext context) {
+                  return LoginVerifyScreen(
+                    vid: vid,
+                  );
+                }));
               },
               child: const Text('Send OTP'),
             )

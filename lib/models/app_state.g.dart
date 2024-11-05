@@ -21,6 +21,18 @@ class _$AppStateSerializer implements StructuredSerializer<AppState> {
       'currentPicCast',
       serializers.serialize(object.currentPicCast,
           specifiedType: const FullType(Cast)),
+      'movieReview',
+      serializers.serialize(object.movieReview,
+          specifiedType: const FullType(BuiltMap, const [
+            const FullType(String),
+            const FullType(BuiltList, const [const FullType(Review)])
+          ])),
+      'tvReview',
+      serializers.serialize(object.tvReview,
+          specifiedType: const FullType(BuiltMap, const [
+            const FullType(String),
+            const FullType(BuiltList, const [const FullType(Review)])
+          ])),
     ];
     Object? value;
     value = object.popularMovie;
@@ -147,6 +159,20 @@ class _$AppStateSerializer implements StructuredSerializer<AppState> {
           result.currentUser.replace(serializers.deserialize(value,
               specifiedType: const FullType(AuthUser))! as AuthUser);
           break;
+        case 'movieReview':
+          result.movieReview.replace(serializers.deserialize(value,
+              specifiedType: const FullType(BuiltMap, const [
+                const FullType(String),
+                const FullType(BuiltList, const [const FullType(Review)])
+              ]))!);
+          break;
+        case 'tvReview':
+          result.tvReview.replace(serializers.deserialize(value,
+              specifiedType: const FullType(BuiltMap, const [
+                const FullType(String),
+                const FullType(BuiltList, const [const FullType(Review)])
+              ]))!);
+          break;
       }
     }
 
@@ -173,6 +199,10 @@ class _$AppState extends AppState {
   final Cast currentPicCast;
   @override
   final AuthUser? currentUser;
+  @override
+  final BuiltMap<String, BuiltList<Review>> movieReview;
+  @override
+  final BuiltMap<String, BuiltList<Review>> tvReview;
 
   factory _$AppState([void Function(AppStateBuilder)? updates]) =>
       (new AppStateBuilder()..update(updates))._build();
@@ -186,10 +216,15 @@ class _$AppState extends AppState {
       this.tvShowsOfCast,
       this.currentPic,
       required this.currentPicCast,
-      this.currentUser})
+      this.currentUser,
+      required this.movieReview,
+      required this.tvReview})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(
         currentPicCast, r'AppState', 'currentPicCast');
+    BuiltValueNullFieldError.checkNotNull(
+        movieReview, r'AppState', 'movieReview');
+    BuiltValueNullFieldError.checkNotNull(tvReview, r'AppState', 'tvReview');
   }
 
   @override
@@ -211,7 +246,9 @@ class _$AppState extends AppState {
         tvShowsOfCast == other.tvShowsOfCast &&
         currentPic == other.currentPic &&
         currentPicCast == other.currentPicCast &&
-        currentUser == other.currentUser;
+        currentUser == other.currentUser &&
+        movieReview == other.movieReview &&
+        tvReview == other.tvReview;
   }
 
   @override
@@ -226,6 +263,8 @@ class _$AppState extends AppState {
     _$hash = $jc(_$hash, currentPic.hashCode);
     _$hash = $jc(_$hash, currentPicCast.hashCode);
     _$hash = $jc(_$hash, currentUser.hashCode);
+    _$hash = $jc(_$hash, movieReview.hashCode);
+    _$hash = $jc(_$hash, tvReview.hashCode);
     _$hash = $jf(_$hash);
     return _$hash;
   }
@@ -241,7 +280,9 @@ class _$AppState extends AppState {
           ..add('tvShowsOfCast', tvShowsOfCast)
           ..add('currentPic', currentPic)
           ..add('currentPicCast', currentPicCast)
-          ..add('currentUser', currentUser))
+          ..add('currentUser', currentUser)
+          ..add('movieReview', movieReview)
+          ..add('tvReview', tvReview))
         .toString();
   }
 }
@@ -301,6 +342,18 @@ class AppStateBuilder implements Builder<AppState, AppStateBuilder> {
   set currentUser(AuthUserBuilder? currentUser) =>
       _$this._currentUser = currentUser;
 
+  MapBuilder<String, BuiltList<Review>>? _movieReview;
+  MapBuilder<String, BuiltList<Review>> get movieReview =>
+      _$this._movieReview ??= new MapBuilder<String, BuiltList<Review>>();
+  set movieReview(MapBuilder<String, BuiltList<Review>>? movieReview) =>
+      _$this._movieReview = movieReview;
+
+  MapBuilder<String, BuiltList<Review>>? _tvReview;
+  MapBuilder<String, BuiltList<Review>> get tvReview =>
+      _$this._tvReview ??= new MapBuilder<String, BuiltList<Review>>();
+  set tvReview(MapBuilder<String, BuiltList<Review>>? tvReview) =>
+      _$this._tvReview = tvReview;
+
   AppStateBuilder();
 
   AppStateBuilder get _$this {
@@ -315,6 +368,8 @@ class AppStateBuilder implements Builder<AppState, AppStateBuilder> {
       _currentPic = $v.currentPic?.toBuilder();
       _currentPicCast = $v.currentPicCast.toBuilder();
       _currentUser = $v.currentUser?.toBuilder();
+      _movieReview = $v.movieReview.toBuilder();
+      _tvReview = $v.tvReview.toBuilder();
       _$v = null;
     }
     return this;
@@ -347,7 +402,9 @@ class AppStateBuilder implements Builder<AppState, AppStateBuilder> {
               tvShowsOfCast: _tvShowsOfCast?.build(),
               currentPic: _currentPic?.build(),
               currentPicCast: currentPicCast.build(),
-              currentUser: _currentUser?.build());
+              currentUser: _currentUser?.build(),
+              movieReview: movieReview.build(),
+              tvReview: tvReview.build());
     } catch (_) {
       late String _$failedField;
       try {
@@ -369,6 +426,10 @@ class AppStateBuilder implements Builder<AppState, AppStateBuilder> {
         currentPicCast.build();
         _$failedField = 'currentUser';
         _currentUser?.build();
+        _$failedField = 'movieReview';
+        movieReview.build();
+        _$failedField = 'tvReview';
+        tvReview.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
             r'AppState', _$failedField, e.toString());

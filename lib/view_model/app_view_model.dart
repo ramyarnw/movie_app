@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:built_collection/built_collection.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_state_notifier/flutter_state_notifier.dart';
@@ -11,11 +13,16 @@ import 'package:movie_app/models/cast.dart';
 import 'package:movie_app/models/tv_shows.dart';
 
 import '../models/movie.dart';
+import '../models/review.dart';
 
 class AppViewModel extends StateNotifier<AppState> {
   AppViewModel() : super(AppState());
+  AppState getState() => state;
+
   ApiService apiService = ApiServiceImpl();
   FireBaseService fireBaseService = FireBaseServiceImpl();
+
+
   Future<void> getPopularMovie() async {
     BuiltList<Movie> popular = await apiService.getPopularMovie();
     state = state.rebuild((p0) => p0.popularMovie = popular.toBuilder());
@@ -76,5 +83,56 @@ class AppViewModel extends StateNotifier<AppState> {
     }
    AuthUser user= await fireBaseService.getUser(uid: currentUser.uid, phoneNo: currentUser.phoneNumber!);
     state = state.rebuild((p) => p.currentUser = user.toBuilder() );
+  }
+  Future<void> createMovieReview(
+      {required String movieId, required Review review}) async {
+    await fireBaseService.createMovieReview(movieId: movieId, review: review);
+  }
+  Future<void> createTVReview(
+      {required String tvId, required Review review}) async {
+    await fireBaseService.createTVReview(tvId: tvId, review: review);
+  }
+  Future<void> deleteMovieReview(
+      {required String movieId, required String reviewId}) async {
+    await fireBaseService.deleteMovieReview(movieId: movieId, reviewId: reviewId);
+  }
+  Future<void> deleteTVReview(
+      {required String tvId, required String reviewId}) async {
+    await fireBaseService.deleteTVReview(tvId: tvId, reviewId: reviewId);
+  }
+  Future<void> updateMovieReview(
+      {required String movieId, required Review review}) async {
+    await fireBaseService.updateMovieReview(movieId: movieId, review: review);
+  }
+  Future<void> updateTvReview(
+      {required String tvId, required Review review}) async {
+    await fireBaseService.updateTvReview(tvId: tvId, review: review);
+  }
+  Map<String,StreamSubscription<BuiltList<Review>>>  movieSubscription = {};
+  @override
+  void dispose()
+  {
+    super.dispose();
+    for (var b in movieSubscription.values) {
+      b.cancel();
+    }
+    for (var b in tvSubscription.values) {
+      b.cancel();
+    }
+
+
+  }
+  void listenMovieReview({required String movieId}) {
+movieSubscription[movieId] = fireBaseService.listenMovieReview(movieId: movieId).asBroadcastStream().listen((BuiltList<Review> e)
+    {
+      state = state.rebuild((b)=> b.movieReview[movieId] = e);
+    });
+  }
+  Map<String,StreamSubscription<BuiltList<Review>>>  tvSubscription = {};
+  void listenTvReview({required String tvId}) {
+tvSubscription[tvId]= fireBaseService.listenTVReview(tvId: tvId).asBroadcastStream().listen((BuiltList<Review> e)
+{
+  state = state.rebuild((b)=> b.tvReview[tvId] = e);
+});
   }
 }

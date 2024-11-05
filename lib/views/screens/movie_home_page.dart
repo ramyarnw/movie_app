@@ -1,7 +1,9 @@
 //import 'package:built_collection/src/list.dart';
 import 'package:built_collection/built_collection.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:movie_app/models/app_state.dart';
+import 'package:movie_app/models/auth_user.dart';
 import 'package:movie_app/models/movie.dart';
 import 'package:movie_app/view_model/app_view_model.dart';
 import 'package:provider/provider.dart';
@@ -33,8 +35,8 @@ class _MovieHomePageState extends State<MovieHomePage>
       loading = true;
     });
     await context.read<AppViewModel>().getPopularMovie();
-await context.read<AppViewModel>().getUpcoming();
-await context.read<AppViewModel>().getTopRatedMovie();
+    await context.read<AppViewModel>().getUpcoming();
+    await context.read<AppViewModel>().getTopRatedMovie();
     setState(() {
       loading = false;
     });
@@ -46,7 +48,6 @@ await context.read<AppViewModel>().getTopRatedMovie();
     super.dispose();
   }
 
-
   @override
   Widget build(BuildContext context) {
     BuiltList<Movie> popular =
@@ -55,6 +56,7 @@ await context.read<AppViewModel>().getTopRatedMovie();
         context.watch<AppState>().upcomingMovie ?? BuiltList();
     BuiltList<Movie> topRated =
         context.watch<AppState>().topRatedMovie ?? BuiltList();
+    AuthUser? user = context.watch<AppState>().currentUser;
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -72,13 +74,20 @@ await context.read<AppViewModel>().getTopRatedMovie();
             color: Colors.black,
             onPressed: () {},
           ),
-          ElevatedButton(onPressed: ()
-              {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (BuildContext context) {
-                      return  const LoginScreen();
+          user == null
+              ? ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (BuildContext context) {
+                      return const LoginScreen();
                     }));
-              }, child: const Text('Login'))
+                  },
+                  child: const Text('Login'))
+              : CircleAvatar(
+                  child: user.profile?.isNotEmpty ?? false
+                      ? Image.network(user.profile!)
+                      : Text(user.name.toString()),
+                )
         ],
         bottom: PreferredSize(
           preferredSize: Size(MediaQuery.of(context).size.width, 60),
@@ -118,7 +127,6 @@ await context.read<AppViewModel>().getTopRatedMovie();
 
                     return MovieTile(
                       movie: p,
-
                     ); /*Image.network(
                   images[index], semanticLabel: movieTitle[index]);*/
                   },
@@ -132,11 +140,11 @@ await context.read<AppViewModel>().getTopRatedMovie();
                   itemBuilder: (BuildContext context, int index) {
                     var p = upcoming[index];
                     //final image = images[index];
-                   // final title = movieTitle[index];
+                    // final title = movieTitle[index];
                     return MovieTile(
                       movie: p,
-                     // title: title,
-                     // image: image,
+                      // title: title,
+                      // image: image,
                     ); /* Image.network(
                   images[index], semanticLabel: movieTitle[index]);*/
                   },
@@ -150,7 +158,7 @@ await context.read<AppViewModel>().getTopRatedMovie();
                   itemBuilder: (BuildContext context, int index) {
                     var p = topRated[index];
                     return MovieTile(
-                     movie: p,
+                      movie: p,
                     );
                     //Image.network(images[index],semanticLabel: movieTitle[index]);
                   },
@@ -178,11 +186,12 @@ class MovieTile extends StatelessWidget {
           onPressed: () {
             Navigator.push(context,
                 MaterialPageRoute(builder: (BuildContext context) {
-              return  MovieDetailScreen(id: movie.id,);
+              return MovieDetailScreen(
+                id: movie.id,
+              );
             }));
           },
-          child:
-          Image.network(
+          child: Image.network(
             movie.posterImage,
             //image,
             width: 80,
