@@ -6,6 +6,7 @@ import 'package:movie_app/models/app_state.dart';
 import 'package:movie_app/models/auth_user.dart';
 import 'package:movie_app/models/movie.dart';
 import 'package:movie_app/view_model/app_view_model.dart';
+import 'package:movie_app/views/screens/edit_profile.dart';
 import 'package:provider/provider.dart';
 
 import 'login_screen.dart';
@@ -83,11 +84,22 @@ class _MovieHomePageState extends State<MovieHomePage>
                     }));
                   },
                   child: const Text('Login'))
-              : CircleAvatar(
-                  child: user.profile?.isNotEmpty ?? false
-                      ? Image.network(user.profile!)
-                      : Text(user.name.toString()),
-                )
+:GestureDetector(
+  onTap: ()
+  {
+    Navigator.push(context,
+        MaterialPageRoute(builder: (BuildContext context) {
+          return const EditProfile();
+        }));
+  },
+  child: CircleAvatar(
+    child: user.profile?.isNotEmpty ?? false
+    ? Image.network(user.profile!)
+        : Text(user.name.toString()),
+
+    ),
+)
+
         ],
         bottom: PreferredSize(
           preferredSize: Size(MediaQuery.of(context).size.width, 60),

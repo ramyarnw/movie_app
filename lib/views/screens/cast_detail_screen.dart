@@ -9,7 +9,6 @@ import '../../models/cast.dart';
 import '../../models/movie.dart';
 import '../../view_model/app_view_model.dart';
 import 'movie_detail_screen.dart';
-import 'movie_home_page.dart';
 
 class CastDetailScreen extends StatefulWidget {
   const CastDetailScreen({super.key, required this.id});

@@ -1,4 +1,6 @@
+
 import 'package:built_collection/built_collection.dart';
+import 'package:flutter/services.dart';
 import 'package:movie_app/models/auth_user.dart';
 import 'package:movie_app/models/review.dart';
 
@@ -32,4 +34,8 @@ abstract class FireBaseService {
   Future<void> deleteTVReview({required String tvId, required String reviewId});
 
   Stream<BuiltList<Review>> listenTVReview({required String tvId});
+
+  Future <AuthUser> updateUser({required AuthUser user});
+
+  Future<AuthUser> updateProfile({required Uint8List file, required AuthUser user});
 }

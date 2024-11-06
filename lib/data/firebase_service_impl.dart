@@ -1,8 +1,12 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:built_collection/src/list.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_cloud_firestore/firebase_cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:movie_app/core/firebase_service.dart';
 import 'package:movie_app/models/auth_user.dart';
 import 'package:movie_app/models/review.dart';
@@ -168,5 +172,27 @@ class FireBaseServiceImpl implements FireBaseService {
   Future<void> updateTvReview(
       {required String tvId, required Review review}) async {
     await tvReviewCollection(tvId).doc(review.id).set(review.toJson());
+  }
+
+
+  @override
+  Future<AuthUser> updateUser({required AuthUser user}) async {
+    await userCollection.doc(user.id).set(user.toJson());
+    return user;
+  }
+
+  @override
+  Future<AuthUser> updateProfile({required Uint8List file, required AuthUser user}) async {
+
+    final storageRef = FirebaseStorage.instance.ref();
+    final userProfileRef = storageRef.child("users/${user.id}.jpg");
+    try {
+      await userProfileRef.putData(file);
+      var url = await userProfileRef.getDownloadURL();
+
+     return await updateUser(user: user.rebuild((a)=>a.profile = url));
+    } on FirebaseException catch (e) {
+      rethrow;
+    }
   }
 }
