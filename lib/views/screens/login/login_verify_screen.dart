@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_state_notifier/flutter_state_notifier.dart';
-import 'package:movie_app/views/screens/movie_home_page.dart';
+import 'package:movie_app/views/mixins/auth_mixin.dart';
+import 'package:movie_app/views/screens/app/movie_home_page.dart';
 import 'package:provider/provider.dart';
 
-import '../../view_model/app_view_model.dart';
+import '../../../view_model/app_view_model.dart';
 
 class LoginVerifyScreen extends StatefulWidget {
   const LoginVerifyScreen({super.key, required this.vid});
@@ -14,7 +15,7 @@ class LoginVerifyScreen extends StatefulWidget {
   State<LoginVerifyScreen> createState() => _LoginVerifyScreenState();
 }
 
-class _LoginVerifyScreenState extends State<LoginVerifyScreen> {
+class _LoginVerifyScreenState extends State<LoginVerifyScreen> with AuthMixin<LoginVerifyScreen> {
   late TextEditingController _controller;
 
   @override
@@ -44,13 +45,15 @@ class _LoginVerifyScreenState extends State<LoginVerifyScreen> {
           ),
           ElevatedButton(
             onPressed: () async {
-              await context
-                  .read<AppViewModel>()
-                  .verifyOtp(smsCode: _controller.text, vid: widget.vid);
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (BuildContext context) {
-                    return const MovieHomePage();
-                  }));            },
+              await verifyOtp(smsCode: _controller.text, vid: widget.vid);
+            },
+              // await context
+              //     .read<AppViewModel>()
+              //     .verifyOtp(smsCode: _controller.text, vid: widget.vid);
+              // Navigator.push(context,
+              //     MaterialPageRoute(builder: (BuildContext context) {
+              //       return const MovieHomePage();
+              //     }));            },
             child: const Text('Submit OTP'),
           )
         ],

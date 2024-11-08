@@ -6,11 +6,16 @@ import 'package:movie_app/models/app_state.dart';
 import 'package:movie_app/models/auth_user.dart';
 import 'package:movie_app/models/movie.dart';
 import 'package:movie_app/view_model/app_view_model.dart';
-import 'package:movie_app/views/screens/edit_profile.dart';
+import 'package:movie_app/views/mixins/movie_mixin.dart';
+import 'package:movie_app/views/screens/login/edit_profile.dart';
 import 'package:provider/provider.dart';
-
-import 'login_screen.dart';
+import '../login/login_screen.dart';
 import 'movie_detail_screen.dart';
+
+extension ProviderUtensils on BuildContext{
+  AppViewModel get  appViewModel=> read<AppViewModel>();
+  AppState get appState => watch<AppState>();
+}
 
 class MovieHomePage extends StatefulWidget {
   const MovieHomePage({super.key});
@@ -20,7 +25,7 @@ class MovieHomePage extends StatefulWidget {
 }
 
 class _MovieHomePageState extends State<MovieHomePage>
-    with TickerProviderStateMixin {
+    with TickerProviderStateMixin, MovieMixin{
   late TabController tabController;
   var loading = false;
 
@@ -35,9 +40,9 @@ class _MovieHomePageState extends State<MovieHomePage>
     setState(() {
       loading = true;
     });
-    await context.read<AppViewModel>().getPopularMovie();
-    await context.read<AppViewModel>().getUpcoming();
-    await context.read<AppViewModel>().getTopRatedMovie();
+    await getPopularMovie();
+   await getUpcoming();
+    await  getTopRatedMovie();
     setState(() {
       loading = false;
     });
@@ -52,12 +57,12 @@ class _MovieHomePageState extends State<MovieHomePage>
   @override
   Widget build(BuildContext context) {
     BuiltList<Movie> popular =
-        context.watch<AppState>().popularMovie ?? BuiltList();
+        context.appState.popularMovie ?? BuiltList();
     BuiltList<Movie> upcoming =
-        context.watch<AppState>().upcomingMovie ?? BuiltList();
+        context.appState.upcomingMovie ?? BuiltList();
     BuiltList<Movie> topRated =
-        context.watch<AppState>().topRatedMovie ?? BuiltList();
-    AuthUser? user = context.watch<AppState>().currentUser;
+        context.appState.topRatedMovie ?? BuiltList();
+    AuthUser? user = context.appState.currentUser;
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -124,7 +129,7 @@ class _MovieHomePageState extends State<MovieHomePage>
         ),
       ),
       body: loading
-          ? const CircularProgressIndicator()
+          ? const Center(child: CircularProgressIndicator())
           : TabBarView(
               controller: tabController,
               children: <Widget>[

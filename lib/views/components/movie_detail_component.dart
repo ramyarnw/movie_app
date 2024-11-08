@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../models/cast.dart';
-import '../screens/cast_detail_screen.dart';
+import '../screens/app/cast_detail_screen.dart';
 
 class CastComponent extends StatelessWidget {
   const CastComponent({super.key, required this.cast,});

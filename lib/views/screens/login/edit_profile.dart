@@ -7,9 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
-import '../../models/app_state.dart';
-import '../../models/auth_user.dart';
-import '../../view_model/app_view_model.dart';
+import '../../../models/app_state.dart';
+import '../../../models/auth_user.dart';
+import '../../../view_model/app_view_model.dart';
 
 class EditProfile extends StatefulWidget {
   const EditProfile({super.key});

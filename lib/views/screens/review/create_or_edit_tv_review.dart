@@ -3,8 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../models/review.dart';
-import '../../view_model/app_view_model.dart';
+import '../../../models/review.dart';
+import '../../../view_model/app_view_model.dart';
 
 class CreateOrEditTvReview extends StatefulWidget {
   const CreateOrEditTvReview({super.key, required this.tvId, this.reviewId});

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:movie_app/view_model/app_view_model.dart';
-import 'package:movie_app/views/screens/login_verify_screen.dart';
+import 'package:movie_app/views/mixins/auth_mixin.dart';
+import 'package:movie_app/views/screens/login/login_verify_screen.dart';
 import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -10,7 +11,7 @@ class LoginScreen extends StatefulWidget {
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _LoginScreenState extends State<LoginScreen> with AuthMixin<LoginScreen> {
   late TextEditingController _controller;
 
   @override
@@ -41,15 +42,16 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             ElevatedButton(
               onPressed: () async {
-                String vid = await context
-                        .read<AppViewModel>()
-                    .sendOtp(phoneNo: _controller.text);
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (BuildContext context) {
-                  return LoginVerifyScreen(
-                    vid: vid,
-                  );
-                }));
+                await sendOtp(phoneNo: _controller.text);
+                // String vid = await context
+                //         .read<AppViewModel>()
+                //     .sendOtp(phoneNo: _controller.text);
+                // Navigator.push(context,
+                //     MaterialPageRoute(builder: (BuildContext context) {
+                //   return LoginVerifyScreen(
+                //     vid: vid,
+                //   );
+                // }));
               },
               child: const Text('Send OTP'),
             )

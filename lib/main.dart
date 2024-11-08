@@ -2,7 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_state_notifier/flutter_state_notifier.dart';
 import 'package:movie_app/view_model/app_view_model.dart';
-import 'package:movie_app/views/screens/movie_home_page.dart';
+import 'package:movie_app/views/screens/app/movie_home_page.dart';
 
 import 'firebase_options.dart';
 import 'models/app_state.dart';

@@ -1,13 +1,14 @@
 import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
 import 'package:movie_app/models/movie.dart';
-import 'package:movie_app/views/screens/movie_review_screen.dart';
+import 'package:movie_app/views/mixins/movie_mixin.dart';
+import 'package:movie_app/views/screens/app/movie_home_page.dart';
+import 'package:movie_app/views/screens/review/movie_review_screen.dart';
 import 'package:provider/provider.dart';
 
-import '../../models/app_state.dart';
-import '../../models/cast.dart';
-import '../../view_model/app_view_model.dart';
-import '../components/movie_detail_component.dart';
+import '../../../models/app_state.dart';
+import '../../../models/cast.dart';
+import '../../components/movie_detail_component.dart';
 
 class MovieDetailScreen extends StatefulWidget {
   const MovieDetailScreen({super.key, required this.id});
@@ -18,7 +19,7 @@ class MovieDetailScreen extends StatefulWidget {
   State<MovieDetailScreen> createState() => _MovieDetailScreenState();
 }
 
-class _MovieDetailScreenState extends State<MovieDetailScreen> {
+class _MovieDetailScreenState extends State<MovieDetailScreen> with MovieMixin{
   var loading = false;
 
   @override
@@ -31,8 +32,8 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
     setState(() {
       loading = true;
     });
-    await context.read<AppViewModel>().getMovieForId(id: widget.id);
-    await context.read<AppViewModel>().getCastForMovie(id: widget.id);
+    await getMovieForId(id: widget.id);
+    await getCastForMovie(id: widget.id);
     setState(() {
       loading = false;
     });
@@ -65,10 +66,10 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    Movie? movie = context.watch<AppState>().currentPic;
+    Movie? movie = context.appState.currentPic;
 
     BuiltList<Cast> castMovie =
-        context.watch<AppState>().castForMovie ?? BuiltList();
+        context.appState.castForMovie ?? BuiltList();
     if (movie == null) {
       return Container();
     }
@@ -161,94 +162,192 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
                   style: TextStyle(fontSize: 20, color: Colors.black),
                 ),
                 Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        const Text('adult    -    '),
-                        Text(movie.adult.toString()),
+                        const Text(
+                          'adult -',
+                        ),
+                        const SizedBox(
+                          width: 100,
+                        ),
+                        Text(
+                          movie.adult.toString(),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'backdrop_path -',
+                        ),
+                        const SizedBox(
+                          width: 40,
+                        ),
+                        Text(
+                          movie.backdropPath,
+                        ),
                       ],
                     ),
                     Row(
                       children: [
-                        const Text('backdrop_path    -    '),
-                        Text(movie.backdropPath),
+                        const Text(
+                          'genre_ids -',
+                        ),
+                        const SizedBox(
+                          width: 70,
+                        ),
+                        Text(
+                          movie.genreIds.toString(),
+                        ),
                       ],
                     ),
                     Row(
                       children: [
-                        const Text('genre_ids     -    '),
-                        Text(movie.genreIds.toString()),
+                        const Text(
+                          'id -',
+                        ),
+                        const SizedBox(
+                          width: 120,
+                        ),
+                        Text(
+                          movie.id.toString(),
+                        ),
                       ],
                     ),
                     Row(
                       children: [
-                        const Text('id     -    '),
-                        Text(movie.id.toString()),
+                        const Text(
+                          'original_language -',
+                        ),
+                        const SizedBox(
+                          width: 20,
+                        ),
+                        Text(
+                          movie.originalLanguage,
+                        )
                       ],
                     ),
                     Row(
                       children: [
-                        const Text('original_language     -     '),
-                        Text(movie.originalLanguage)
+                        const Text(
+                          'original_title -',
+                        ),
+                        const SizedBox(
+                          width: 50,
+                        ),
+                        Text(
+                          movie.originalTitle,
+                        ),
                       ],
                     ),
                     Row(
                       children: [
-                        const Text('original_title     -     '),
-                        Text(movie.originalTitle),
+                        const Text(
+                          'overview -',
+                        ),
+                        const SizedBox(
+                          width: 80,
+                        ),
+                        Text(
+                          movie.overview,
+                        ),
                       ],
                     ),
                     Row(
                       children: [
-                        const Text('overview    -     '),
-                        Text(movie.overview),
+                        const Text(
+                          'popularity -',
+                        ),
+                        const SizedBox(
+                          width: 70,
+                        ),
+                        Text(
+                          movie.popularity.toString(),
+                        ),
                       ],
                     ),
                     Row(
                       children: [
-                        const Text('popularity     -     '),
-                        Text(movie.popularity.toString()),
+                        const Text(
+                          'poster_path -',
+                        ),
+                        const SizedBox(
+                          width: 50,
+                        ),
+                        Text(
+                          movie.posterPath,
+                        ),
                       ],
                     ),
                     Row(
                       children: [
-                        const Text('poster_path     -     '),
-                        Text(movie.posterPath),
+                        const Text(
+                          'release_date -',
+                        ),
+                        const SizedBox(
+                          width: 50,
+                        ),
+                        Text(
+                          movie.releaseDate,
+                        ),
                       ],
                     ),
                     Row(
                       children: [
-                        const Text('release_date     -     '),
-                        Text(movie.releaseDate),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        const Text('title     -     '),
+                        const Text(
+                          'title -',
+                        ),
+                        const SizedBox(
+                          width: 110,
+                        ),
                         Text(movie.title),
                       ],
                     ),
                     Row(
                       children: [
-                        const Text('video - '),
-                        Text(movie.video.toString()),
+                        const Text(
+                          'video -',
+                        ),
+                        const SizedBox(
+                          width: 100,
+                        ),
+                        Text(
+                          movie.video.toString(),
+                        ),
                       ],
                     ),
                     Row(
                       children: [
-                        const Text('vote_average - '),
-                        Text(movie.voteAverage.toString()),
+                        const Text(
+                          'vote_average -',
+                        ),
+                        const SizedBox(
+                          width: 50,
+                        ),
+                        Text(
+                          movie.voteAverage.toString(),
+                        ),
                       ],
                     ),
                     Row(
                       children: [
-                        const Text('vote_count - '),
-                        Text(movie.voteCount.toString()),
+                        const Text(
+                          'vote_count -',
+                        ),
+                        const SizedBox(
+                          width: 60,
+                        ),
+                        Text(
+                          movie.voteCount.toString(),
+                        ),
                       ],
                     ),
                   ],
                 ),
-                //Text(Movie().posterPath)
               ],
             ),
     );
