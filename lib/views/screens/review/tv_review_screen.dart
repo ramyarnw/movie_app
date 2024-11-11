@@ -34,7 +34,7 @@ class _TvReviewScreenState extends State<TvReviewScreen> with MovieMixin{
   @override
   Widget build(BuildContext context) {
     BuiltList<Review> review =
-        context.appState.tvReview[widget.tvId] ?? BuiltList();
+        context.appState.tvReview?[widget.tvId] ?? BuiltList();
 
     return Scaffold(
       appBar: AppBar(

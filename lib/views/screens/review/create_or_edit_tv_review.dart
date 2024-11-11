@@ -29,7 +29,7 @@ class _CreateOrEditTvReviewState extends State<CreateOrEditTvReview> {
       return;
     }
     BuiltList<Review> currentTvReviews =
-        context.read<AppViewModel>().getState().tvReview[widget.tvId] ??
+        context.read<AppViewModel>().getState().tvReview?[widget.tvId] ??
             BuiltList();
     var b =
         currentTvReviews.where((c) => c.id == widget.reviewId).firstOrNull;

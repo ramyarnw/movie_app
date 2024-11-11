@@ -12,6 +12,7 @@ Serializers _$serializers = (new Serializers().toBuilder()
       ..add(Cast.serializer)
       ..add(Movie.serializer)
       ..add(Review.serializer)
+      ..add(StorageItem.serializer)
       ..add(TvShows.serializer)
       ..addBuilderFactory(
           const FullType(BuiltList, const [const FullType(Movie)]),
@@ -43,6 +44,9 @@ Serializers _$serializers = (new Serializers().toBuilder()
             const FullType(BuiltList, const [const FullType(Review)])
           ]),
           () => new MapBuilder<String, BuiltList<Review>>())
+      ..addBuilderFactory(
+          const FullType(BuiltList, const [const FullType(StorageItem)]),
+          () => new ListBuilder<StorageItem>())
       ..addBuilderFactory(
           const FullType(BuiltList, const [const FullType(int)]),
           () => new ListBuilder<int>())

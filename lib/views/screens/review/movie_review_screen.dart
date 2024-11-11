@@ -36,7 +36,7 @@ class _MovieReviewScreenState extends State<MovieReviewScreen> with MovieMixin {
   @override
   Widget build(BuildContext context) {
     BuiltList<Review> review =
-        context.appState.movieReview[widget.movieId] ?? BuiltList();
+        context.appState.movieReview?[widget.movieId] ?? BuiltList();
 
     return Scaffold(
       appBar: AppBar(

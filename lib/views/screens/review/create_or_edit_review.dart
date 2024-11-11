@@ -31,7 +31,7 @@ class _CreateOrEditReviewState extends State<CreateOrEditReview> {
       return;
     }
     BuiltList<Review> currentMovieReviews =
-        context.read<AppViewModel>().getState().movieReview[widget.movieId] ??
+        context.read<AppViewModel>().getState().movieReview?[widget.movieId] ??
             BuiltList();
     var b =
         currentMovieReviews.where((c) => c.id == widget.reviewId).firstOrNull;

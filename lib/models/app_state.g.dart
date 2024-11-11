@@ -21,18 +21,6 @@ class _$AppStateSerializer implements StructuredSerializer<AppState> {
       'currentPicCast',
       serializers.serialize(object.currentPicCast,
           specifiedType: const FullType(Cast)),
-      'movieReview',
-      serializers.serialize(object.movieReview,
-          specifiedType: const FullType(BuiltMap, const [
-            const FullType(String),
-            const FullType(BuiltList, const [const FullType(Review)])
-          ])),
-      'tvReview',
-      serializers.serialize(object.tvReview,
-          specifiedType: const FullType(BuiltMap, const [
-            const FullType(String),
-            const FullType(BuiltList, const [const FullType(Review)])
-          ])),
     ];
     Object? value;
     value = object.popularMovie;
@@ -96,6 +84,41 @@ class _$AppStateSerializer implements StructuredSerializer<AppState> {
         ..add('currentUser')
         ..add(serializers.serialize(value,
             specifiedType: const FullType(AuthUser)));
+    }
+    value = object.movieReview;
+    if (value != null) {
+      result
+        ..add('movieReview')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(BuiltMap, const [
+              const FullType(String),
+              const FullType(BuiltList, const [const FullType(Review)])
+            ])));
+    }
+    value = object.tvReview;
+    if (value != null) {
+      result
+        ..add('tvReview')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(BuiltMap, const [
+              const FullType(String),
+              const FullType(BuiltList, const [const FullType(Review)])
+            ])));
+    }
+    value = object.item;
+    if (value != null) {
+      result
+        ..add('item')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(StorageItem)));
+    }
+    value = object.itemList;
+    if (value != null) {
+      result
+        ..add('itemList')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(
+                BuiltList, const [const FullType(StorageItem)])));
     }
     return result;
   }
@@ -173,6 +196,16 @@ class _$AppStateSerializer implements StructuredSerializer<AppState> {
                 const FullType(BuiltList, const [const FullType(Review)])
               ]))!);
           break;
+        case 'item':
+          result.item.replace(serializers.deserialize(value,
+              specifiedType: const FullType(StorageItem))! as StorageItem);
+          break;
+        case 'itemList':
+          result.itemList.replace(serializers.deserialize(value,
+                  specifiedType: const FullType(
+                      BuiltList, const [const FullType(StorageItem)]))!
+              as BuiltList<Object?>);
+          break;
       }
     }
 
@@ -200,9 +233,13 @@ class _$AppState extends AppState {
   @override
   final AuthUser? currentUser;
   @override
-  final BuiltMap<String, BuiltList<Review>> movieReview;
+  final BuiltMap<String, BuiltList<Review>>? movieReview;
   @override
-  final BuiltMap<String, BuiltList<Review>> tvReview;
+  final BuiltMap<String, BuiltList<Review>>? tvReview;
+  @override
+  final StorageItem? item;
+  @override
+  final BuiltList<StorageItem>? itemList;
 
   factory _$AppState([void Function(AppStateBuilder)? updates]) =>
       (new AppStateBuilder()..update(updates))._build();
@@ -217,14 +254,13 @@ class _$AppState extends AppState {
       this.currentPic,
       required this.currentPicCast,
       this.currentUser,
-      required this.movieReview,
-      required this.tvReview})
+      this.movieReview,
+      this.tvReview,
+      this.item,
+      this.itemList})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(
         currentPicCast, r'AppState', 'currentPicCast');
-    BuiltValueNullFieldError.checkNotNull(
-        movieReview, r'AppState', 'movieReview');
-    BuiltValueNullFieldError.checkNotNull(tvReview, r'AppState', 'tvReview');
   }
 
   @override
@@ -248,7 +284,9 @@ class _$AppState extends AppState {
         currentPicCast == other.currentPicCast &&
         currentUser == other.currentUser &&
         movieReview == other.movieReview &&
-        tvReview == other.tvReview;
+        tvReview == other.tvReview &&
+        item == other.item &&
+        itemList == other.itemList;
   }
 
   @override
@@ -265,6 +303,8 @@ class _$AppState extends AppState {
     _$hash = $jc(_$hash, currentUser.hashCode);
     _$hash = $jc(_$hash, movieReview.hashCode);
     _$hash = $jc(_$hash, tvReview.hashCode);
+    _$hash = $jc(_$hash, item.hashCode);
+    _$hash = $jc(_$hash, itemList.hashCode);
     _$hash = $jf(_$hash);
     return _$hash;
   }
@@ -282,7 +322,9 @@ class _$AppState extends AppState {
           ..add('currentPicCast', currentPicCast)
           ..add('currentUser', currentUser)
           ..add('movieReview', movieReview)
-          ..add('tvReview', tvReview))
+          ..add('tvReview', tvReview)
+          ..add('item', item)
+          ..add('itemList', itemList))
         .toString();
   }
 }
@@ -354,6 +396,16 @@ class AppStateBuilder implements Builder<AppState, AppStateBuilder> {
   set tvReview(MapBuilder<String, BuiltList<Review>>? tvReview) =>
       _$this._tvReview = tvReview;
 
+  StorageItemBuilder? _item;
+  StorageItemBuilder get item => _$this._item ??= new StorageItemBuilder();
+  set item(StorageItemBuilder? item) => _$this._item = item;
+
+  ListBuilder<StorageItem>? _itemList;
+  ListBuilder<StorageItem> get itemList =>
+      _$this._itemList ??= new ListBuilder<StorageItem>();
+  set itemList(ListBuilder<StorageItem>? itemList) =>
+      _$this._itemList = itemList;
+
   AppStateBuilder();
 
   AppStateBuilder get _$this {
@@ -368,8 +420,10 @@ class AppStateBuilder implements Builder<AppState, AppStateBuilder> {
       _currentPic = $v.currentPic?.toBuilder();
       _currentPicCast = $v.currentPicCast.toBuilder();
       _currentUser = $v.currentUser?.toBuilder();
-      _movieReview = $v.movieReview.toBuilder();
-      _tvReview = $v.tvReview.toBuilder();
+      _movieReview = $v.movieReview?.toBuilder();
+      _tvReview = $v.tvReview?.toBuilder();
+      _item = $v.item?.toBuilder();
+      _itemList = $v.itemList?.toBuilder();
       _$v = null;
     }
     return this;
@@ -403,8 +457,10 @@ class AppStateBuilder implements Builder<AppState, AppStateBuilder> {
               currentPic: _currentPic?.build(),
               currentPicCast: currentPicCast.build(),
               currentUser: _currentUser?.build(),
-              movieReview: movieReview.build(),
-              tvReview: tvReview.build());
+              movieReview: _movieReview?.build(),
+              tvReview: _tvReview?.build(),
+              item: _item?.build(),
+              itemList: _itemList?.build());
     } catch (_) {
       late String _$failedField;
       try {
@@ -427,9 +483,13 @@ class AppStateBuilder implements Builder<AppState, AppStateBuilder> {
         _$failedField = 'currentUser';
         _currentUser?.build();
         _$failedField = 'movieReview';
-        movieReview.build();
+        _movieReview?.build();
         _$failedField = 'tvReview';
-        tvReview.build();
+        _tvReview?.build();
+        _$failedField = 'item';
+        _item?.build();
+        _$failedField = 'itemList';
+        _itemList?.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
             r'AppState', _$failedField, e.toString());

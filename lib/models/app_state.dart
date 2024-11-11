@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:movie_app/models/auth_user.dart';
 import 'package:movie_app/models/review.dart';
 import 'package:movie_app/models/serializers.dart';
+import 'package:movie_app/models/storage_model/storage_item.dart';
 import 'package:movie_app/models/tv_shows.dart';
 
 import 'cast.dart';
@@ -46,11 +47,13 @@ abstract class AppState implements Built<AppState, AppStateBuilder> {
 
   AuthUser? get currentUser;
 
-  BuiltMap<String,BuiltList<Review>> get movieReview;
-  BuiltMap<String,BuiltList<Review>> get tvReview;
+  BuiltMap<String, BuiltList<Review>>? get movieReview;
+
+  BuiltMap<String, BuiltList<Review>>? get tvReview;
+
+  StorageItem? get item;
+
+  BuiltList<StorageItem>? get itemList;
 
 
-  //String uid;
-
-  //Movie get moviePic;
 }

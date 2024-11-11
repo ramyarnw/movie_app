@@ -2,6 +2,7 @@ import 'package:built_collection/built_collection.dart';
 import 'package:built_value/serializer.dart';
 import 'package:built_value/standard_json_plugin.dart';
 import 'package:movie_app/models/review.dart';
+import 'package:movie_app/models/storage_model/storage_item.dart';
 import 'package:movie_app/models/tv_shows.dart';
 
 import 'app_state.dart';
@@ -18,6 +19,7 @@ part 'serializers.g.dart';
   AppState,
   AuthUser,
   Review,
+  StorageItem,
   //ApiError,
 ])
 final Serializers serializers =

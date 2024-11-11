@@ -3,12 +3,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter_state_notifier/flutter_state_notifier.dart';
 import 'package:movie_app/view_model/app_view_model.dart';
 import 'package:movie_app/views/screens/app/movie_home_page.dart';
+import 'package:movie_app/views/screens/load_splash/load_page.dart';
+import 'package:movie_app/views/screens/local_storage/storage_home_page.dart';
 
 import 'firebase_options.dart';
 import 'models/app_state.dart';
+import 'models/storage_model/database.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  final database = AppDatabase();
+
+  await database.into(database.officeUser).insert(OfficeUserCompanion.insert(
+    title: 'office: finish drift setup',
+    content: 'We can now write queries and define our own tables.',
+  ));
+  List<OfficeUserData> allItems = await database.select(database.officeUser).get();
+
+  print('items in database: $allItems');
   await Firebase.initializeApp(options:DefaultFirebaseOptions.currentPlatform );
   runApp(
     StateNotifierProvider<AppViewModel, AppState>(
@@ -19,9 +31,11 @@ Future<void> main() async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+     String title = '';
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
@@ -43,7 +57,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MovieHomePage(),
+      home: StorageHomePage(title: title),
     );
   }
 }

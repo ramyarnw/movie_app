@@ -6,8 +6,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter_state_notifier/flutter_state_notifier.dart';
 import 'package:movie_app/core/api_service.dart';
 import 'package:movie_app/core/firebase_service.dart';
+import 'package:movie_app/core/storage_service.dart';
 import 'package:movie_app/data/api_service_impl.dart';
 import 'package:movie_app/data/firebase_service_impl.dart';
+import 'package:movie_app/data/storage_service_impl.dart';
 import 'package:movie_app/models/app_state.dart';
 import 'package:movie_app/models/auth_user.dart';
 import 'package:movie_app/models/cast.dart';
@@ -15,6 +17,7 @@ import 'package:movie_app/models/tv_shows.dart';
 
 import '../models/movie.dart';
 import '../models/review.dart';
+import '../models/storage_model/storage_item.dart';
 
 class AppViewModel extends StateNotifier<AppState> {
   AppViewModel() : super(AppState());
@@ -23,6 +26,7 @@ class AppViewModel extends StateNotifier<AppState> {
 
   ApiService apiService = ApiServiceImpl();
   FireBaseService fireBaseService = FireBaseServiceImpl();
+  StorageService storageService = StorageServiceImpl();
 
   Future<void> getPopularMovie() async {
     BuiltList<Movie> popular = await apiService.getPopularMovie();
@@ -154,9 +158,37 @@ class AppViewModel extends StateNotifier<AppState> {
     AuthUser u = await fireBaseService.updateUser(user: user);
     state = state.rebuild((p1) => p1.currentUser = u.toBuilder());
   }
-  Future<void> updateProfile({required Uint8List file, required AuthUser user}) async {
+
+  Future<void> updateProfile(
+      {required Uint8List file, required AuthUser user}) async {
     AuthUser u = await fireBaseService.updateProfile(user: user, file: file);
     state = state.rebuild((p1) => p1.currentUser = u.toBuilder());
-    }
   }
 
+  Future<void> writeSecureData({required StorageItem newItem}) async {
+    await storageService.writeSecureData(newItem: newItem);
+    state = state.rebuild((a) => a.item = newItem.toBuilder());
+  }
+
+  Future<void> readSecureData({required String key}) async {
+    String? r = await storageService.readSecureData(key: key);
+    state = state.rebuild((a) => a.item = StorageItem((b) => b
+      ..key = key
+      ..value = r ?? '').toBuilder());
+  }
+  Future<void> deleteSecureData({required StorageItem item}) async {
+    await storageService.deleteSecureData(item: item);
+  }
+
+  Future<void> readAllSecureData() async {
+     BuiltList<StorageItem> r = await storageService.readAllSecureData();
+     state = state.rebuild((a) => a.itemList = r.toBuilder());
+  }
+  Future<void> deleteAllSecureData() async {
+    await storageService.deleteAllSecureData();
+  }
+  Future<void> containsKeyInSecureData({required String key}) async {
+    await storageService.containsKeyInSecureData(key: key);
+  }
+
+}
