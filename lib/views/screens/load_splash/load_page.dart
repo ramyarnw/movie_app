@@ -23,7 +23,8 @@ class _LoadPageState extends State<LoadPage> {
   loadNewLaunch() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
-      bool _newLaunch = ((prefs.getBool('newLaunch') ?? true));
+    ((prefs.setBool('newLaunch',false) ));
+      bool _newLaunch = prefs.getBool('newLaunch') ?? true;
       print("newLaunch:");
       print(_newLaunch);
       newLaunch = _newLaunch;
